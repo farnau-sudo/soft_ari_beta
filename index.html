@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#173c2d">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Contador Ari V3">
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD4UlEQVR42u3dS3LUQBBFUbuCPbAKdgDBmBUzJtgYA0d4AG2jdktZ+Tl37LBUWbde6tfS8+evX56AWywlADlADpAD5AA5QA6QA+QAOUAOgBwgB8gBcoAcIAfIAXKAHCAHQA6QA+QAOUAOkAPkADnQjU9jR/7r57fjf/z9x++BJXoe8gqGu1SgS385ThdimigN5Qhzor0lreTYqEVLRTrIkcSJfpbUliOtFj0UqSpHCS2qK7KYYZ+bJEfFEteNkMUMo6idHD20KBchixnGVVWOrmaUGF3ettJbixItZjHDeCvJMc2MtKNeamTsNeSYbEbCCix14Ud2OZiRsBpLLfhR7FQWkkNspK7MYgY/Mspx6cgjL0hfuq2NfvQ85niZrRg/Gv+6aduNt8jYuGhbMVvZqOBqb8ZFlQ2erS3NZcqp7LlzefO/9esvG9pKzCJ4a6oe3PpF/zZnXK2WZryzoUfqu9eM+ObSua2c68d2M5q3lV11vDmvj7+8JdVwJEciKSdc212lZ+iRrR9ff//+ZbaxSI49fmQzwwFpFj8mmxEnh7uvFeu5lPWt8BgeG0FyZKvpET/ymxGwP0MfE7y3sjPbomdIb0TFzPcVb5Aj7Zo7vmMNhiA5zgkPsUGOoytv8km45MCbXHtXtvpLZIe/BFdygBwgx4m9z/0gcoAcSCWHWN7bFiUHtJXwxSf2yAFygBwgB8gBcoAcIAfIAXKAHOOJeQEhOUCODy1H1Kqz5AA5QI4TY1lbJAfIgWxy5E/m9z+LUW7/JQe0lRzLbvJhqeT4u6d47jxOjrQr75HXW0844JActw9FhcdoOe5dczOPPFbCmYjfnyO/eMs/CskRYUYVP5rI4T5FxXqu4TV9/9hzeHgsZhw/i5nmx9o4N/nNyOmHDwBmr+aE/Ij+InXw9aUTPwab5LuykVKugYHxsem84hPXjjn2lPKKhb7dj2ARo9tKQBQH5P+WFhMfUVNOZc+dtpv/rd/tuj1yXLoIYl4N2Pg4dHNbubq+r6UMmMKXbTVrKJ3bSuQzXY0f/tiZHE8eq0kcG/uTw93azPVZw8fPDKeyKCuH8MhZk6UWzCjQVviRrQ5LXVSgzAHpZD+yjX2pkVEXO5Wd5kfO8W6+fP5f2l9fz7wMltoZXVU5GvuRf1zZ20rLFlNF96WmRtEhOapHSDm5lyrb51bJUStC6nbD2nIkV6T6QVIHObJZ0ubcu5Uc2xVpdkmmoRzxlnS9TNdZjktF8X4OugxSgRy4Az9NADlADpAD5AA5QA6QA+QAOUAOgBwgB8gBcoAcIAfIAXKAHCAHQA6QA+QAOUAOkAPkQFX+AACasj2RLVeJAAAAAElFTkSuQmCC">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD4UlEQVR42u3dS3LUQBBFUbuCPbAKdgDBmBUzJtgYA0d4AG2jdktZ+Tl37LBUWbde6tfS8+evX56AWywlADlADpAD5AA5QA6QA+QAOUAOgBwgB8gBcoAcIAfIAXKAHCAHQA6QA+QAOUAOkAPkADnQjU9jR/7r57fjf/z9x++BJXoe8gqGu1SgS385ThdimigN5Qhzor0lreTYqEVLRTrIkcSJfpbUliOtFj0UqSpHCS2qK7KYYZ+bJEfFEteNkMUMo6idHD20KBchixnGVVWOrmaUGF3ettJbixItZjHDeCvJMc2MtKNeamTsNeSYbEbCCix14Ud2OZiRsBpLLfhR7FQWkkNspK7MYgY/Mspx6cgjL0hfuq2NfvQ85niZrRg/Gv+6aduNt8jYuGhbMVvZqOBqb8ZFlQ2erS3NZcqp7LlzefO/9esvG9pKzCJ4a6oe3PpF/zZnXK2WZryzoUfqu9eM+ObSua2c68d2M5q3lV11vDmvj7+8JdVwJEciKSdc212lZ+iRrR9ff//+ZbaxSI49fmQzwwFpFj8mmxEnh7uvFeu5lPWt8BgeG0FyZKvpET/ymxGwP0MfE7y3sjPbomdIb0TFzPcVb5Aj7Zo7vmMNhiA5zgkPsUGOoytv8km45MCbXHtXtvpLZIe/BFdygBwgx4m9z/0gcoAcSCWHWN7bFiUHtJXwxSf2yAFygBwgB8gBcoAcIAfIAXKAHOOJeQEhOUCODy1H1Kqz5AA5QI4TY1lbJAfIgWxy5E/m9z+LUW7/JQe0lRzLbvJhqeT4u6d47jxOjrQr75HXW0844JActw9FhcdoOe5dczOPPFbCmYjfnyO/eMs/CskRYUYVP5rI4T5FxXqu4TV9/9hzeHgsZhw/i5nmx9o4N/nNyOmHDwBmr+aE/Ij+InXw9aUTPwab5LuykVKugYHxsem84hPXjjn2lPKKhb7dj2ARo9tKQBQH5P+WFhMfUVNOZc+dtpv/rd/tuj1yXLoIYl4N2Pg4dHNbubq+r6UMmMKXbTVrKJ3bSuQzXY0f/tiZHE8eq0kcG/uTw93azPVZw8fPDKeyKCuH8MhZk6UWzCjQVviRrQ5LXVSgzAHpZD+yjX2pkVEXO5Wd5kfO8W6+fP5f2l9fz7wMltoZXVU5GvuRf1zZ20rLFlNF96WmRtEhOapHSDm5lyrb51bJUStC6nbD2nIkV6T6QVIHObJZ0ubcu5Uc2xVpdkmmoRzxlnS9TNdZjktF8X4OugxSgRy4Az9NADlADpAD5AA5QA6QA+QAOUAOgBwgB8gBcoAcIAfIAXKAHCAHQA6QA+QAOUAOkAPkQFX+AACasj2RLVeJAAAAAElFTkSuQmCC">
 
 <title>Softball Pitch Tracker · V3 (Edición Ariadna Arnau)</title>
 <style>
@@ -298,6 +298,28 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
     opacity: 0 !important;
     pointer-events: none !important;
 }
+
+/* ===== Mejoras v3.1 ===== */
+.tabs{position:sticky;top:0;z-index:50;background:var(--paper);padding:8px 0 10px;margin-top:-8px}
+.stat small{display:block;margin-top:3px}
+select{text-overflow:ellipsis}
+:focus-visible{outline:3px solid var(--green2);outline-offset:2px}
+[hidden]{display:none!important}
+.app-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;
+ background:#0f241b;color:#fff;border:1px solid var(--lime);border-radius:14px;padding:12px 14px;max-width:min(92vw,460px);width:max-content;
+ display:flex;align-items:center;gap:12px;font-size:14px;line-height:1.35;box-shadow:0 8px 28px #0006;z-index:2147483000;transition:opacity .2s,transform .2s}
+.app-toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.app-toast button{background:var(--lime);color:var(--green);padding:7px 12px;border-radius:10px;font-size:13px;white-space:nowrap}
+.backup-status{background:#f2f5ef;border-radius:12px;padding:11px 12px;font-size:14px;margin-bottom:12px;line-height:1.4}
+.bk-warn{color:var(--red);font-weight:800}
+.backup-actions{display:flex;gap:10px;margin-bottom:10px}.backup-actions button{flex:1}
+.backup-help{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5}
+.backup-help summary{cursor:pointer;font-weight:800;color:var(--green);font-size:14px}
+.backup-help ol,.backup-help ul{margin:8px 0 0;padding-left:20px}.backup-help li{margin-bottom:5px}
+.backup-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;
+ border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:13px;font-weight:700}
+.paste-area{width:100%;font:13px ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:11px;padding:10px;user-select:text;-webkit-user-select:text;resize:vertical}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -317,7 +339,7 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
   </div>
   <div class="row" style="margin-bottom:10px">
    <div style="flex:1"><div class="label">Pitcher</div><input id="pitcher" placeholder="Nombre de la pitcher"></div>
-   <div style="width:40%"><div class="label">Pertenece a</div>
+   <div style="width:54%"><div class="label">Pertenece a</div>
     <select id="pitcherTeamSide">
      <option value="home">Local</option>
      <option value="away">Visitante</option>
@@ -474,6 +496,7 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
 </section>
 <section id="history" class="panel">
  <div class="row" style="margin:4px 0 14px"><h2 class="section-title" style="margin:0">Partidos guardados</h2><button class="secondary tiny" id="export">Exportar a Excel</button></div>
+ <div class="backup-banner" id="backupBanner" hidden><span>⚠️ Sin copia de seguridad reciente</span><button class="secondary tiny" id="bannerBackupBtn">Guardar copia</button></div>
  <div id="historyList"></div>
 </section>
 <section id="stats" class="panel">
@@ -546,14 +569,35 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
   </div>
  </div>
 
- <div class="card">
-  <h2 class="section-title">💾 Copia de seguridad (JSON)</h2>
-  <p class="muted" style="margin-bottom:12px">El navegador guarda automáticamente tus datos en local. Exporta un JSON para guardar en iCloud/Drive o enviarlo por WhatsApp a un chat propio/técnico.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-   <button class="secondary" id="exportBackupBtn" style="flex:1">📤 Exportar JSON</button>
-   <button class="secondary" id="importBackupBtn" style="flex:1">📥 Importar JSON</button>
-   <input type="file" id="importFileInput" accept=".json" style="display:none">
+ <div class="card" id="backupCard">
+  <h2 class="section-title">💾 Copia de seguridad</h2>
+  <div class="backup-status" id="backupStatus"></div>
+  <div class="backup-actions">
+   <button class="primary" id="exportBackupBtn">📤 Guardar copia</button>
+   <button class="secondary" id="importBackupBtn">📥 Restaurar copia</button>
   </div>
+  <input type="file" id="importFileInput" accept=".json,application/json,text/plain,.txt" hidden>
+  <button class="subtle-warn" id="undoRestoreBtn" style="width:100%" hidden>↩ Deshacer la última restauración o borrado</button>
+
+  <details class="backup-help" open>
+   <summary>¿Dónde se guarda y cómo la recupero?</summary>
+   <ul>
+    <li>Tus partidos viven <b>solo en este navegador y en este dispositivo</b>. La copia es un archivo <code>.json</code> con todo: histórico, partido en curso y ajustes.</li>
+    <li><b>iPhone / iPad:</b> al pulsar <i>Guardar copia</i> se abre el menú de compartir. Elige <b>«Guardar en Archivos»</b> (iCloud Drive) o envíalo por AirDrop, correo o WhatsApp.</li>
+    <li><b>Android / ordenador:</b> el archivo se descarga a la carpeta <b>Descargas</b>.</li>
+    <li><b>Para recuperar:</b> pulsa <i>Restaurar copia</i> y elige el archivo en Archivos, iCloud o Descargas. Si te lo mandaron por WhatsApp, guárdalo antes en Archivos.</li>
+    <li>Puedes <b>combinar</b> la copia con tus partidos actuales (no borra nada) o <b>reemplazar</b> todo.</li>
+    <li><b>Importante:</b> Safari puede borrar los datos de una web que no se abre en 7 días. Añade la app a la pantalla de inicio y haz una copia después de cada torneo.</li>
+   </ul>
+  </details>
+  <details class="backup-help">
+   <summary>Si el archivo no funciona: copiar y pegar</summary>
+   <p style="margin:8px 0">Copia el contenido y pégalo en Notas o en un mensaje a ti mismo. Para recuperarlo, pégalo aquí.</p>
+   <div class="backup-actions" style="margin-bottom:0">
+    <button class="secondary" id="copyBackupBtn">📋 Copiar copia</button>
+    <button class="secondary" id="pasteBackupBtn">📝 Pegar copia</button>
+   </div>
+  </details>
  </div>
 
  <div class="card">
@@ -800,6 +844,30 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
  </div>
 </div>
 
+<div class="modal-overlay" id="restoreChoiceModal">
+ <div class="modal-card" style="max-width:400px">
+  <h3>Restaurar copia de seguridad</h3>
+  <p id="rcMsg"></p>
+  <div style="display:flex;flex-direction:column;gap:8px">
+   <button class="primary" id="rcMerge">🔀 Combinar con mis datos (recomendado)</button>
+   <button class="danger" id="rcReplace">♻️ Reemplazar todo</button>
+   <button class="secondary" id="rcCancel">Cancelar</button>
+  </div>
+ </div>
+</div>
+
+<div class="modal-overlay" id="pasteModal">
+ <div class="modal-card" style="max-width:440px;text-align:left">
+  <h3 id="pasteTitle" style="text-align:center"></h3>
+  <p id="pasteMsg" style="text-align:center"></p>
+  <textarea id="pasteArea" class="paste-area" rows="8" spellcheck="false"></textarea>
+  <div class="modal-actions" style="margin-top:14px">
+   <button class="secondary" id="pasteClose">Cerrar</button>
+   <button class="primary" id="pasteAction"></button>
+  </div>
+ </div>
+</div>
+
 <footer>
  <div class="footer-title">Softball Pitch Tracker · Edición Ariadna Arnau (V3)</div>
  <div class="footer-sub">Herramienta de control personal.</div>
@@ -809,8 +877,19 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
 <script>
 (()=>{
 const $=id=>document.getElementById(id);
+let toastTimer=null;
+function toast(msg,opts={}){
+ let t=$('appToast');
+ if(!t){t=document.createElement('div');t.id='appToast';t.className='app-toast';t.setAttribute('role','status');document.body.appendChild(t);}
+ t.textContent='';
+ const sp=document.createElement('span');sp.textContent=msg;t.appendChild(sp);
+ if(opts.action){const b=document.createElement('button');b.textContent=opts.action.label;b.onclick=()=>{t.classList.remove('show');opts.action.run();};t.appendChild(b);}
+ t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),opts.ms||3200);
+}
+const alert=m=>toast(String(m),{ms:4500}); // sustituye a los alert() que bloquean en iPhone
 const today=()=>new Date().toLocaleDateString('en-CA');
-const nowTime=()=>new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+const nowTime=()=>new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
+const normTime=t=>{const m=String(t||'').trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*([AaPp])?\.?[Mm]?\.?$/);if(!m)return '';let h=+m[1];const ap=(m[3]||'').toLowerCase();if(ap==='p'&&h<12)h+=12;if(ap==='a'&&h===12)h=0;return String(h).padStart(2,'0')+':'+m[2];};
 
 let state={homeTeam:'',awayTeam:'',pitcherTeamSide:'home',date:today(),time:nowTime(),pitcher:'',gameField:'',tournamentName:'',inning:1,balls:0,strikes:0,events:[],innings:{},extraWarmup:{},saved:false,currentMode:'advanced'};
 let history=[];
@@ -830,8 +909,12 @@ let careerChartGrouping = 'game'; // 'game' | 'turn' | 'inning'
 let careerChartRange = 'all';
 const detailChartState = {}; // gameId -> { metric, grouping }
 
-const saveCurrent=()=>{try{localStorage.setItem('softbolCurrent',JSON.stringify(state))}catch(e){}};
-const saveHistory=()=>{try{localStorage.setItem('softbolHistory',JSON.stringify(history))}catch(e){}};
+let storageWarned=false;
+const storageFail=()=>{if(!storageWarned){storageWarned=true;toast('⚠️ No se pueden guardar los datos en este navegador (¿modo privado o memoria llena?). Haz una copia de seguridad.',{ms:8000});}};
+const saveCurrent=()=>{try{localStorage.setItem('softbolCurrent',JSON.stringify(state))}catch(e){storageFail()}};
+const saveHistory=()=>{try{localStorage.setItem('softbolHistory',JSON.stringify(history))}catch(e){storageFail()}};
+let redoStack=null;
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const isHit=e=>e==='Hit del bateador'||e==='En juego';
 const isStrike=e=>e==='Strike'||e==='Strike cantado'||e==='Strike tirándole';
@@ -866,7 +949,7 @@ async function updateWakeLock() {
  const keepAwake = $('keepScreenAwakeToggle').checked;
  if (keepAwake) {
   if ('wakeLock' in navigator && document.visibilityState === 'visible' && wakeLock === null) {
-   try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
+   try { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;}); } catch (err) {}
   }
  } else {
   if (wakeLock !== null) {
@@ -1773,7 +1856,7 @@ function syncInputs(){
  updateTeamSelectOptions();
 
  $('gameDate').value=state.date||today();
- $('gameTime').value=state.time||nowTime();
+ $('gameTime').value=normTime(state.time)||nowTime();
  $('gameField').value=state.gameField||'';
  $('tournamentName').value=state.tournamentName||'';
  $('pitcher').value=state.pitcher||localStorage.getItem('softbolPitcher')||'Ari'; 
@@ -1949,6 +2032,7 @@ function askReachedBase(){
 
 async function addPitch(type){
  if(atBatPromptPending) return;
+ redoStack=null;
  state.homeTeam=$('homeTeam').value.trim();
  state.awayTeam=$('awayTeam').value.trim();
  state.pitcherTeamSide=$('pitcherTeamSide').value;
@@ -1981,6 +2065,7 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===b.dataset.tab));
  if(b.dataset.tab==='history')renderHistory();
  if(b.dataset.tab==='stats')renderCareerStats();
+ updateBackupUI();
 }));
 document.querySelectorAll('[data-event]').forEach(b=>b.addEventListener('click',()=>addPitch(b.dataset.event)));
 ['gameDate','gameTime','pitcher','gameField','tournamentName','homeTeam','awayTeam','pitcherTeamSide'].forEach(id=>$(id).addEventListener('change',()=>{state.date=$('gameDate').value;state.time=$('gameTime').value;state.pitcher=$('pitcher').value;state.gameField=$('gameField').value.trim();state.tournamentName=$('tournamentName').value.trim();state.homeTeam=$('homeTeam').value.trim();state.awayTeam=$('awayTeam').value.trim();state.pitcherTeamSide=$('pitcherTeamSide').value;state.saved=false;saveCurrent()}));
@@ -1999,10 +2084,11 @@ $('nextInning').onclick = doNextInning;
 $('mNextInning').onclick = doNextInning;
 
 async function handleUndo(){
- if(!state.events.length){await showModal('Sin lanzamientos', 'No hay pitcheos para deshacer.', false);return}
- const confirmed = await showModal('Deshacer lanzamiento', '¿Deshacer lanzamiento? Se eliminará el último lanzamiento registrado.', true);
- if(!confirmed) return;
- state.events.pop();recount();state.saved=false;render();
+ if(!state.events.length){toast('No hay lanzamientos para deshacer.');return}
+ const ev=state.events.pop();recount();state.saved=false;render();redoStack=ev;
+ toast('Deshecho: '+ev.type,{ms:5000,action:{label:'Rehacer',run:()=>{
+  if(redoStack&&redoStack.inning===state.inning){state.events.push(redoStack);recount();state.saved=false;redoStack=null;render();}
+ }}});
 }
 
 $('undo').onclick = handleUndo;
@@ -2654,7 +2740,7 @@ async function performSaveGame(){
   history.unshift(g);
  }
  saveHistory();state.saved=true;state.savedGameId=g.id;saveCurrent();
- alert(idx>=0?'Partido actualizado. Se ha sustituido el registro anterior.':'Partido guardado en el histórico de este dispositivo.');
+ toast(idx>=0?'Partido actualizado.':'Partido guardado en el histórico.',{ms:6000,action:{label:'Hacer copia',run:()=>doExportBackup()}});updateBackupUI();
  renderHistory();
  if($('liveStatsOverlay')?.classList.contains('active')) refreshLiveStats();
  return true;
@@ -3793,66 +3879,199 @@ function renderHistory(){
 
  document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=async()=>{
   const confirmed = await showModal('Eliminar partido', '¿Eliminar este partido del histórico?', true);
-  if(confirmed){history=history.filter(x=>x.id!==Number(b.dataset.delete));saveHistory();renderHistory();renderCareerStats();}
+  if(confirmed){takeSafetySnapshot('eliminar un partido');history=history.filter(x=>x.id!==Number(b.dataset.delete));saveHistory();updateBackupUI();toast('Partido eliminado. Puedes deshacerlo en Ajustes.',{ms:5000});renderHistory();renderCareerStats();}
  });
 }
 
-$('exportBackupBtn').onclick = () => {
- const backupData = {
-  version: 2,
-  exportDate: new Date().toISOString(),
-  pitcher: localStorage.getItem('softbolPitcher') || '',
-  distance: localStorage.getItem('softbolDistance') || '13.1',
-  targetPct: String(getTargetGoodPct()),
-  videoFps: videoSettings.fpsMode,
-  videoType: videoSettings.recordingType,
-  allowMidChange: localStorage.getItem('softbolAllowMidChange') || 'false',
-  keepAwake: localStorage.getItem('softbolKeepAwake') || 'false',
-  history: history,
-  current: state
- };
- const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
- const downloadAnchor = document.createElement('a');
- downloadAnchor.setAttribute("href", dataStr);
- downloadAnchor.setAttribute("download", `copia-seguridad-softbol-v2-${today()}.json`);
- document.body.appendChild(downloadAnchor);
- downloadAnchor.click();
- downloadAnchor.remove();
-};
+// =========================================================================
+// COPIA DE SEGURIDAD: guardar, restaurar (combinar/reemplazar), deshacer
+// =========================================================================
+const LAST_BACKUP_KEY='softbolLastBackup', SAFETY_KEY='softbolSafety';
+const fmtDT=iso=>{try{return new Date(iso).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'short'})}catch(e){return iso||''}};
 
-$('importBackupBtn').onclick = () => { $('importFileInput').click(); };
-
-$('importFileInput').onchange = (event) => {
- const fileReader = new FileReader();
- if(event.target.files[0]){
-  fileReader.readAsText(event.target.files[0], "UTF-8");
-  fileReader.onload = async (e) => {
-   try {
-    const backup = JSON.parse(e.target.result);
-    if(backup && Array.isArray(backup.history)){
-     const confirmed = await showModal('Restaurar copia', 'Se cargarán los datos de la copia de seguridad. ¿Deseas reemplazar el histórico actual?', true);
-     if(confirmed){
-      history = backup.history;
-      if(backup.current) state = backup.current;
-      if(backup.pitcher) localStorage.setItem('softbolPitcher', backup.pitcher);
-      if(backup.distance) localStorage.setItem('softbolDistance', backup.distance);
-      if(backup.targetPct) localStorage.setItem('softbolTargetPct', backup.targetPct);
-      if(backup.videoFps){ videoSettings.fpsMode = backup.videoFps; localStorage.setItem('softbolVideoFps', backup.videoFps); }
-      if(backup.videoType){ videoSettings.recordingType = backup.videoType; localStorage.setItem('softbolVideoType', backup.videoType); }
-      if(backup.allowMidChange) localStorage.setItem('softbolAllowMidChange', backup.allowMidChange);
-      if(backup.keepAwake) { localStorage.setItem('softbolKeepAwake', backup.keepAwake); $('keepScreenAwakeToggle').checked = (backup.keepAwake === 'true'); }
-      saveHistory(); saveCurrent(); syncInputs(); updateWakeLock();
-      if(state.currentMode) setModeDirect(state.currentMode); else render();
-      renderHistory();
-      renderCareerStats();
-      alert('¡Copia de seguridad restaurada con éxito!');
-     }
-    } else { alert('El archivo seleccionado no es válido.'); }
-   } catch(err) { alert('Error al leer el archivo JSON.'); }
-   event.target.value = '';
-  };
+async function deliverFile(filename, content, mime){
+ const blob=content instanceof Blob?content:new Blob([content],{type:mime});
+ const coarse=window.matchMedia&&window.matchMedia('(pointer:coarse)').matches;
+ if(coarse&&navigator.canShare&&window.File){
+  const file=new File([blob],filename,{type:mime});
+  let canShare=false;try{canShare=navigator.canShare({files:[file]})}catch(e){}
+  if(canShare){
+   try{await navigator.share({files:[file],title:filename});return 'ok';}
+   catch(e){
+    if(e&&e.name==='AbortError')return 'cancel';
+    if(e&&e.name==='NotAllowedError'){ // el gesto del usuario caducó (p. ej. tras generar el Excel): pedir un toque nuevo
+     if(await showModal('Archivo listo','Pulsa Aceptar para abrir el menú de compartir y guardar «'+filename+'».')){
+      try{await navigator.share({files:[file],title:filename});return 'ok';}catch(e2){if(e2&&e2.name==='AbortError')return 'cancel';}
+     } else return 'cancel';
+    }
+   }
+  }
  }
+ try{
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;a.rel='noopener';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  return 'ok';
+ }catch(e){return 'fail';}
+}
+
+function buildBackup(){
+ return {
+  app:'softbol-ari', version:3, exportDate:new Date().toISOString(),
+  pitcher:localStorage.getItem('softbolPitcher')||'',
+  distance:localStorage.getItem('softbolDistance')||'13.1',
+  targetPct:String(getTargetGoodPct()),
+  videoFps:videoSettings.fpsMode, videoType:videoSettings.recordingType,
+  allowMidChange:localStorage.getItem('softbolAllowMidChange')||'false',
+  keepAwake:localStorage.getItem('softbolKeepAwake')||'false',
+  history:history, current:state
+ };
+}
+function markBackupDone(){try{localStorage.setItem(LAST_BACKUP_KEY,new Date().toISOString())}catch(e){}updateBackupUI();}
+
+function updateBackupUI(){
+ const st=$('backupStatus'); if(!st) return;
+ let last=null;try{last=localStorage.getItem(LAST_BACKUP_KEY)}catch(e){}
+ const days=last?Math.floor((Date.now()-new Date(last).getTime())/864e5):null;
+ const n=history.length;
+ st.innerHTML=`<b>${n}</b> partido${n===1?'':'s'} guardado${n===1?'':'s'} en este dispositivo · `+
+  (!last?'<span class="bk-warn">Todavía no has hecho ninguna copia</span>'
+   :days>=14?`<span class="bk-warn">Última copia hace ${days} días</span>`
+   :`Última copia: ${esc(fmtDT(last))}`);
+ let hasSafety=false;try{hasSafety=!!localStorage.getItem(SAFETY_KEY)}catch(e){}
+ $('undoRestoreBtn').hidden=!hasSafety;
+ const bn=$('backupBanner'); if(bn){
+  bn.hidden=!(n>0&&(!last||days>=14));
+  bn.querySelector('span').textContent=last?`⚠️ Última copia hace ${days} días`:'⚠️ Aún no has hecho ninguna copia de seguridad';
+ }
+}
+
+function takeSafetySnapshot(reason){
+ try{localStorage.setItem(SAFETY_KEY,JSON.stringify({reason,date:new Date().toISOString(),data:buildBackup()}))}catch(e){}
+}
+
+function fixState(){
+ if(!state||typeof state!=='object')state={};
+ const d={homeTeam:'',awayTeam:'',pitcherTeamSide:'home',date:today(),time:nowTime(),pitcher:'',gameField:'',tournamentName:'',inning:1,balls:0,strikes:0,events:[],innings:{},extraWarmup:{},saved:false,currentMode:'advanced'};
+ Object.keys(d).forEach(k=>{if(state[k]===undefined||state[k]===null)state[k]=d[k];});
+ if(!Array.isArray(state.events))state.events=[];
+ if(typeof state.extraWarmup!=='object')state.extraWarmup={};
+}
+
+function mergeHistory(cur,inc){
+ const out=cur.slice();let added=0;
+ inc.forEach(g=>{
+  if(!g||typeof g!=='object')return;
+  const key=g.gameKey||gameIdentity(g);
+  const i=out.findIndex(x=>x.id===g.id||(x.gameKey||gameIdentity(x))===key);
+  if(i<0){out.push(g);added++;}
+ });
+ out.sort((a,b)=>(b.id||0)-(a.id||0));
+ return {list:out,added};
+}
+
+function applyBackup(b,mode){
+ if(mode==='replace'){
+  history=b.history.slice();
+  if(b.current&&typeof b.current==='object'){state=b.current;fixState();}
+  const set=(k,v)=>{if(v!==undefined&&v!==null&&v!=='')localStorage.setItem(k,v)};
+  set('softbolPitcher',b.pitcher);set('softbolDistance',b.distance);set('softbolTargetPct',b.targetPct);
+  set('softbolAllowMidChange',b.allowMidChange);set('softbolKeepAwake',b.keepAwake);
+  if(b.videoFps){videoSettings.fpsMode=b.videoFps;localStorage.setItem('softbolVideoFps',b.videoFps);}
+  if(b.videoType){videoSettings.recordingType=b.videoType;localStorage.setItem('softbolVideoType',b.videoType);}
+ }else{
+  history=mergeHistory(history,b.history).list;
+ }
+ saveHistory();saveCurrent();syncInputs();updateWakeLock();
+ if(state.currentMode)setModeDirect(state.currentMode);else render();
+ renderHistory();renderCareerStats();updateBackupUI();
+}
+
+function showRestoreChoice(msg){
+ return new Promise(resolve=>{
+  $('rcMsg').textContent=msg;
+  const ov=$('restoreChoiceModal'),m=$('rcMerge'),r=$('rcReplace'),c=$('rcCancel');
+  ov.classList.add('active');
+  const done=v=>{ov.classList.remove('active');m.onclick=r.onclick=c.onclick=null;resolve(v);};
+  m.onclick=()=>done('merge');r.onclick=()=>done('replace');c.onclick=()=>done('cancel');
+ });
+}
+
+async function handleBackupText(text){
+ let raw;
+ try{raw=JSON.parse(String(text).replace(/^\uFEFF/,'').trim());}
+ catch(e){toast('No se pudo leer: el contenido no es una copia válida.',{ms:5000});return false;}
+ if(!raw||typeof raw!=='object'||!Array.isArray(raw.history)){toast('Ese archivo no parece una copia de este programa.',{ms:5000});return false;}
+ const added=mergeHistory(history,raw.history).added;
+ const choice=await showRestoreChoice(`Copia del ${fmtDT(raw.exportDate)}: ${raw.history.length} partidos (${added} nuevos respecto a los que tienes ahora). «Combinar» no borra nada; «Reemplazar» sustituye todo.`);
+ if(choice==='cancel')return false;
+ takeSafetySnapshot(choice==='replace'?'reemplazar con una copia':'combinar con una copia');
+ applyBackup(raw,choice);
+ toast(choice==='replace'?'✅ Copia restaurada.':`✅ Copia combinada: ${added} partidos añadidos.`,{ms:5000});
+ return true;
+}
+
+async function doExportBackup(){
+ const json=JSON.stringify(buildBackup(),null,2);
+ const r=await deliverFile(`copia-seguridad-softbol-ari-${today()}.json`,json,'application/json');
+ if(r==='ok'){markBackupDone();toast('✅ Copia lista. Asegúrate de guardarla en Archivos/iCloud o de enviarla a tu correo.',{ms:6000});}
+ else if(r==='fail')openPasteModal('copy',json);
+}
+$('exportBackupBtn').onclick=doExportBackup;
+$('bannerBackupBtn').onclick=doExportBackup;
+
+$('importBackupBtn').onclick=()=>$('importFileInput').click();
+$('importFileInput').onchange=async e=>{
+ const f=e.target.files&&e.target.files[0];if(!f)return;
+ try{await handleBackupText(await f.text());}catch(err){toast('No se pudo abrir el archivo. Prueba con «Pegar copia».',{ms:5000});}
+ e.target.value='';
 };
+
+$('undoRestoreBtn').onclick=async()=>{
+ let snap=null;try{snap=JSON.parse(localStorage.getItem(SAFETY_KEY)||'null')}catch(e){}
+ if(!snap||!snap.data){updateBackupUI();return}
+ if(!await showModal('Deshacer',`Se recuperarán los datos tal y como estaban antes de «${snap.reason}» (${fmtDT(snap.date)}). ¿Continuar?`))return;
+ applyBackup(snap.data,'replace');
+ try{localStorage.removeItem(SAFETY_KEY)}catch(e){}
+ updateBackupUI();toast('✅ Datos recuperados.');
+};
+
+function openPasteModal(mode,text){
+ const ov=$('pasteModal'),area=$('pasteArea'),act=$('pasteAction'),close=$('pasteClose');
+ const shut=()=>{ov.classList.remove('active');act.onclick=close.onclick=null;};
+ close.onclick=shut;
+ if(mode==='copy'){
+  $('pasteTitle').textContent='📋 Copiar copia de seguridad';
+  $('pasteMsg').textContent='Copia todo este texto y guárdalo en Notas o envíatelo. Para recuperarlo usa «Pegar copia».';
+  area.value=text;area.readOnly=true;act.textContent='Copiar texto';
+  act.onclick=async()=>{
+   try{await navigator.clipboard.writeText(area.value);}catch(e){area.select();try{document.execCommand('copy')}catch(e2){}}
+   markBackupDone();toast('Texto copiado.');
+  };
+ }else{
+  $('pasteTitle').textContent='📝 Pegar copia de seguridad';
+  $('pasteMsg').textContent='Pega aquí el texto completo de tu copia.';
+  area.value='';area.readOnly=false;act.textContent='Restaurar';
+  act.onclick=async()=>{const t=area.value;if(!t.trim()){toast('Pega primero el texto de la copia.');return}shut();await handleBackupText(t);};
+ }
+ ov.classList.add('active');
+ if(mode!=='copy')setTimeout(()=>area.focus(),50);
+}
+$('copyBackupBtn').onclick=async()=>{
+ const json=JSON.stringify(buildBackup(),null,2);
+ try{await navigator.clipboard.writeText(json);markBackupDone();toast('✅ Copia copiada al portapapeles. Pégala en Notas o en un mensaje.',{ms:5000});}
+ catch(e){openPasteModal('copy',json);}
+};
+$('pasteBackupBtn').onclick=()=>openPasteModal('paste');
+
+async function exportCsvFallback(){
+ const rows=[['Fecha','Hora','Partido','Pitcher','Campo','Torneo','Resultado','Entrada','N° lanzamiento','Tipo','Velocidad (mph)','Se envasó']];
+ history.slice().reverse().forEach(g=>(g.events||[]).forEach((e,i)=>rows.push([g.date,g.time,g.opponent,g.pitcher,g.gameField,g.tournamentName,g.finalScore,e.inning,e.num||i+1,e.type,e.speed||'',e.reachedBase===true?'Sí':(e.reachedBase===false?'No':'')])));
+ const safe=v=>{v=String(v==null?'':v).replace(/\r?\n/g,' ');return /^[=+\-@\t]/.test(v)?"'"+v:v};
+ const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${safe(c).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+ if(await deliverFile(`lanzamientos-softbol-ari-${today()}.csv`,csv,'text/csv')==='ok')toast('CSV generado.');
+}
 
 async function ensureExcelJSLoaded(){
  if(window.ExcelJS) return true;
@@ -3878,7 +4097,7 @@ async function handleExportExcel(){
   if(!loaded || !window.ExcelJS){
    if(btnHistory){ btnHistory.disabled = false; btnHistory.textContent = prevTxtH; }
    if(btnStats){ btnStats.disabled = false; btnStats.textContent = prevTxtS; }
-   alert('No se ha podido cargar el módulo de Excel. Comprueba tu conexión a internet.');
+   if(await showModal('Excel no disponible','No se pudo cargar el módulo de Excel (necesita internet la primera vez). ¿Quieres exportar un archivo CSV, que también abre Excel?'))await exportCsvFallback();
    return;
   }
 
@@ -4222,9 +4441,7 @@ async function handleExportExcel(){
   summarySheet.columns.forEach(c=>c.width=20);
   const buffer=await workbook.xlsx.writeBuffer();
   const blob=new Blob([buffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=`estadisticas-softbol-ari-${today()}.xlsx`;
-  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  if(await deliverFile(`estadisticas-softbol-ari-${today()}.xlsx`,blob,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')==='ok')toast('Excel generado.');
   } finally {
    if(btnHistory){ btnHistory.disabled = false; btnHistory.textContent = prevTxtH; }
    if(btnStats){ btnStats.disabled = false; btnStats.textContent = prevTxtS; }
@@ -4253,14 +4470,15 @@ $('saveSettings').onclick=()=>{
 
 $('deleteAll').onclick=async()=>{
  if(!history.length){alert('El histórico ya está vacío.');return}
- const confirmed = await showModal('Borrar todo el histórico', '¿Borrar todos los partidos guardados de este dispositivo?', true);
- if(confirmed){history=[];saveHistory();renderHistory();renderCareerStats();}
+ const confirmed = await showModal('Borrar todo el histórico', '¿Borrar todos los partidos guardados de este dispositivo? Se guardará una copia temporal por si te arrepientes.', true);
+ if(confirmed){takeSafetySnapshot('borrar el histórico');history=[];saveHistory();renderHistory();renderCareerStats();updateBackupUI();toast('Histórico borrado. Puedes recuperarlo en Ajustes → Deshacer.',{ms:6000});}
 };
 
 syncInputs();
 if(state.currentMode) setModeDirect(state.currentMode); else render();
 renderHistory();
 renderCareerStats();
+updateBackupUI();
 })();
 </script>
 </body>
