@@ -300,12 +300,17 @@ div[class*="tiiny"], div[id*="tiiny"], a[href*="tiiny"], iframe[src*="tiiny"], f
 }
 
 /* ===== Mejoras v3.1 ===== */
-.tabs{position:sticky;top:0;z-index:50;background:var(--paper);padding:8px 0 10px;margin-top:-8px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;margin:0;display:flex;gap:6px;
+ padding:8px max(12px,calc((100vw - 720px)/2)) calc(8px + env(safe-area-inset-bottom,0px));
+ background:rgba(245,247,242,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.tabs .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:11px;padding:7px 2px;line-height:1.2}
+.tab-ic{font-size:19px;line-height:1.1}
+body{padding-bottom:84px}
 .stat small{display:block;margin-top:3px}
 select{text-overflow:ellipsis}
 :focus-visible{outline:3px solid var(--green2);outline-offset:2px}
 [hidden]{display:none!important}
-.app-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;
+.app-toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;
  background:#0f241b;color:#fff;border:1px solid var(--lime);border-radius:14px;padding:12px 14px;max-width:min(92vw,460px);width:max-content;
  display:flex;align-items:center;gap:12px;font-size:14px;line-height:1.35;box-shadow:0 8px 28px #0006;z-index:2147483000;transition:opacity .2s,transform .2s}
 .app-toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
@@ -320,19 +325,50 @@ select{text-overflow:ellipsis}
  border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:13px;font-weight:700}
 .paste-area{width:100%;font:13px ui-monospace,Menlo,monospace;border:1px solid var(--line);border-radius:11px;padding:10px;user-select:text;-webkit-user-select:text;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* ===== v3.2: inicio, warm-up y gráficas ===== */
+.live-hero{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.match-cta{width:100%;padding:18px 14px;font-size:20px;font-weight:900;letter-spacing:.5px;background:#0f241b;color:var(--lime);
+ border:2px solid var(--lime);border-radius:18px;box-shadow:0 6px 18px #0f241b44}
+.match-cta small{display:block;font-size:12px;font-weight:600;opacity:.85;margin-top:4px;letter-spacing:0;color:#d5e6d9}
+.game-info>summary{cursor:pointer;font-weight:800;color:var(--green);list-style:none;padding:2px 0 12px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:15px}
+.game-info>summary::-webkit-details-marker{display:none}
+.game-info>summary::after{content:'✏️ Editar';font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+.game-info[open]>summary::after{content:'Ocultar ▲'}
+.game-info:not([open])>summary{padding-bottom:4px}
+.warmup-strip{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.warmup-txt{flex:1;min-width:0;font-size:12px;color:var(--muted);line-height:1.4}
+.wu-stepper{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.wu-stepper button{min-width:44px;min-height:44px;border-radius:12px;font-size:16px;font-weight:900;padding:0 10px}
+.wu-stepper button:disabled{opacity:.35}
+.wu-stepper b{min-width:22px;text-align:center;font-size:16px}
+.warmup-help{margin-top:8px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.warmup-help summary{cursor:pointer;font-weight:800;color:var(--green)}
+.m-warmup{display:flex;align-items:center;justify-content:center;gap:10px;margin:2px 0 8px;color:#c6d8ca;font-size:13px}
+.m-warmup button{background:#1d3d2d;color:#fff;border:1px solid #2f5d45;border-radius:10px;min-width:44px;min-height:40px;font-weight:900;font-size:15px}
+.m-warmup button:disabled{opacity:.35}
+.m-warmup b{min-width:20px;text-align:center;color:#fff}
+.metric-group{margin-bottom:8px}
+.metric-group-title{font-size:11px;font-weight:800;color:var(--muted);margin:0 0 4px 2px;letter-spacing:.2px}
+.chart-pill{min-height:30px}
 </style>
 </head>
 <body>
 <header><div class="wrap"><div class="eyebrow">Fastpitch · Cuaderno V3</div><h1>El contador de Ari</h1><p>Seguimiento personal + Analizador de vídeo con zoom</p></div></header>
 <main>
 <div class="tabs">
-<button class="tab active" data-tab="live">Partido</button>
-<button class="tab" data-tab="history">Histórico</button>
-<button class="tab" data-tab="stats">Evolución</button>
-<button class="tab" data-tab="settings">Ajustes</button>
+<button class="tab active" data-tab="live"><span class="tab-ic">⚾</span>Partido</button>
+<button class="tab" data-tab="history"><span class="tab-ic">📋</span>Histórico</button>
+<button class="tab" data-tab="stats"><span class="tab-ic">📈</span>Evolución</button>
+<button class="tab" data-tab="settings"><span class="tab-ic">⚙️</span>Ajustes</button>
 </div>
 <section id="live" class="panel active">
+ <div class="live-hero">
+  <button class="primary match-cta" id="openMatchModeBtn">⚡ MODO PARTIDO<small id="matchCtaSub">Toca para empezar a registrar</small></button>
+  <button class="secondary" id="openLiveStatsBtn" style="width:100%;padding:12px;font-size:15px">📊 Estadísticas del partido en directo</button>
+ </div>
  <div class="card">
+  <details class="game-info" id="gameInfo"><summary id="gameInfoSummary">Datos del partido</summary>
   <div class="row" style="margin-bottom:10px">
    <div style="flex:1"><div class="label">Equipo Local</div><input id="homeTeam" placeholder="Ej. CB Viladecans"></div>
    <div style="flex:1"><div class="label">Equipo Visitante</div><input id="awayTeam" placeholder="Ej. CBS Sant Boi"></div>
@@ -354,6 +390,7 @@ select{text-overflow:ellipsis}
    <div style="flex:1"><div class="label">Campo de juego</div><input id="gameField" placeholder="Ej. Campo municipal"></div>
   </div>
   <div style="margin-bottom:10px"><div class="label">Torneo / Competición</div><input id="tournamentName" placeholder="Ej. Liga catalana, Copa..." ></div>
+  </details>
   <div class="stats">
    <div class="stat"><strong id="total">0</strong><span>Total pitcheos</span><small class="stat-sub" id="totalWarmupSub">Incl. warm-up: 0</small></div>
    <div class="stat"><strong id="inningTotal">0</strong><span>Pitcheos inn</span><small class="muted" style="font-size:10px">Sin warm-up</small></div>
@@ -376,9 +413,18 @@ select{text-overflow:ellipsis}
    </div>
   </div>
   <div class="warmup-strip">
-   <span><span class="warmup-pill">Warm-up</span> <span id="warmupBreakdownText">0 pitcheos (solo suman al total)</span></span>
-   <button type="button" class="secondary tiny" id="addWarmupBtn" style="padding:5px 9px;font-size:11px">+1 Warm-up</button>
+   <div class="warmup-txt"><span class="warmup-pill">Calentamiento</span><div id="warmupBreakdownText" style="margin-top:4px">Entrada 1: 5 base</div></div>
+   <div class="wu-stepper" title="Lanzamientos de calentamiento EXTRA en esta entrada">
+    <button type="button" class="secondary" id="subWarmupBtn" aria-label="Quitar un calentamiento extra" disabled>−</button>
+    <b id="warmupExtraCount">0</b>
+    <button type="button" class="secondary" id="addWarmupBtn" aria-label="Añadir un calentamiento extra">+1</button>
+   </div>
   </div>
+  <details class="warmup-help"><summary>¿Cómo funciona el calentamiento?</summary>
+   <p style="margin:6px 0 0">Antes de cada entrada la pitcher calienta. La app suma <b>automáticamente 5 lanzamientos en la 1.ª entrada y 3 en cada una de las siguientes</b>.
+   Si en esa entrada calentó más de lo normal (una pausa, un cambio de bateadora, una lluvia…), pulsa <b>+1</b> por cada lanzamiento extra; con <b>−</b> corriges si te pasas.
+   Los de calentamiento <b>cuentan en el total de pitcheos</b> (carga del brazo) pero <b>no entran en los porcentajes</b> de strikes y bolas.</p>
+  </details>
  </div>
 
  <div class="card">
@@ -400,10 +446,7 @@ select{text-overflow:ellipsis}
   <p class="notice" id="mainNotice">Registra los lanzamientos desde Modo Partido. Los círculos muestran el conteo del turno actual.</p>
  </div>
 
-  <button class="secondary" id="openLiveStatsBtn" style="width:100%;margin-bottom:8px;padding:13px;font-size:15px">📊 Partido en directo</button>
-  <button class="primary" id="openMatchModeBtn" style="width:100%;margin-bottom:14px;padding:16px;font-size:18px;background:#0f241b;border:2px solid var(--lime);color:var(--lime);border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.15)">
-   ⚡ MODO PARTIDO
-  </button>
+  
 
   <div class="card" id="registerPitchCard" style="display:none">
    <div class="row"><h2 class="section-title" style="margin:0 0 10px">Registrar lanzamiento</h2></div>
@@ -681,6 +724,9 @@ select{text-overflow:ellipsis}
   <div class="match-stat"><span>Pitcheos inn</span><strong id="mInningTotal">0</strong></div>
   <div class="match-stat"><span>Inn</span><strong id="mInning">1</strong></div>
  </div>
+ <div class="m-warmup"><span>Calentamiento extra</span>
+  <button type="button" id="mSubWarmup" aria-label="Quitar calentamiento extra" disabled>−</button><b id="mWarmupExtra">0</b><button type="button" id="mAddWarmup" aria-label="Añadir calentamiento extra">+1</button>
+ </div>
 
  <div class="match-count-row" id="matchCountRow">
   <div class="match-count-box" id="mBox1">
@@ -907,6 +953,7 @@ if(!state.extraWarmup || typeof state.extraWarmup !== 'object') state.extraWarmu
 let careerChartMetric = 'strikes_pct';
 let careerChartGrouping = 'game'; // 'game' | 'turn' | 'inning'
 let careerChartRange = 'all';
+let careerTournament = '';
 const detailChartState = {}; // gameId -> { metric, grouping }
 
 let storageWarned=false;
@@ -1900,11 +1947,27 @@ function renderDots(containerId, maxDots, activeCount, activeClass){
  container.innerHTML = html;
 }
 
-$('addWarmupBtn').onclick = () => {
- state.extraWarmup[state.inning] = (Number(state.extraWarmup[state.inning]) || 0) + 1;
+function warmupDelta(d){
+ const cur = Number(state.extraWarmup[state.inning]) || 0;
+ if(d < 0 && cur <= 0){ toast('No hay calentamientos extra en esta entrada.'); return; }
+ const next = Math.max(0, cur + d);
+ if(next) state.extraWarmup[state.inning] = next; else delete state.extraWarmup[state.inning];
  state.saved = false;
  render();
-};
+}
+$('addWarmupBtn').onclick = () => warmupDelta(1);
+$('subWarmupBtn').onclick = () => warmupDelta(-1);
+$('mAddWarmup').onclick = () => warmupDelta(1);
+$('mSubWarmup').onclick = () => warmupDelta(-1);
+
+function updateGameInfoSummary(){
+ const el = $('gameInfoSummary'); if(!el) return;
+ const home = ($('homeTeam').value || state.homeTeam || '').trim() || 'Local';
+ const away = ($('awayTeam').value || state.awayTeam || '').trim() || 'Visitante';
+ const d = $('gameDate').value || state.date || '';
+ const pit = ($('pitcher').value || state.pitcher || '').trim();
+ el.textContent = `${home} vs ${away} · ${d}${pit ? ' · ' + pit : ''}`;
+}
 
 function countReachedBase(events){ return (events||[]).filter(e=>e.reachedBase===true).length; }
 
@@ -1929,7 +1992,17 @@ function render(){
  $('inningsDone').textContent = state.inning;
  $('inningLabel').textContent = state.inning;
  $('logCount').textContent = state.events.length + ' registrados';
- $('warmupBreakdownText').textContent = `${warmupTotal} warm-up en partido (solo suman al total)`;
+ {
+  const wi = warmupInfo.innings || [];
+  const idx = wi.indexOf(state.inning);
+  const baseThis = idx >= 0 ? (idx === 0 ? 5 : 3) : (wi.length === 0 ? 5 : 3);
+  const extraThis = Math.max(0, Number(state.extraWarmup[state.inning]) || 0);
+  $('warmupBreakdownText').textContent = `Entrada ${state.inning}: ${baseThis} base${extraThis ? ' + ' + extraThis + ' extra' : ''} = ${baseThis + extraThis}${(idx < 0 && !extraThis) ? ' (se añaden al primer lanzamiento)' : ''} · Acumulado en el partido: ${warmupTotal}`;
+  ['warmupExtraCount', 'mWarmupExtra'].forEach(id => { if($(id)) $(id).textContent = extraThis; });
+  ['subWarmupBtn', 'mSubWarmup'].forEach(id => { if($(id)) $(id).disabled = extraThis <= 0; });
+  if($('matchCtaSub')) $('matchCtaSub').textContent = state.events.length ? `Entrada ${state.inning} · ${state.events.length} lanzamientos registrados` : 'Toca para empezar a registrar';
+  updateGameInfoSummary();
+ }
 
  let val1=0, val2=0, lbl1='BOLAS', lbl2='STRIKES', showBox2=true;
  const currentInningEvts = inningEvents(state.inning);
@@ -2305,25 +2378,7 @@ function renderLiveOnlyStats(liveGame, containerId='liveCareerStatsContainer'){
     </div>
    </div>
 
-   <div class="chart-mode-pills" style="flex-wrap:wrap;margin-bottom:8px">
-    <button type="button" class="chart-pill ${dState.metric==='good_vs_bad'?'active':''}" data-lmetric="good_vs_bad">🟢🔴 Buenas vs Malas</button>
-    <button type="button" class="chart-pill ${dState.metric==='k_bb_hit'?'active':''}" data-lmetric="k_bb_hit">🎯 K / BB / Hits</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikeouts'?'active':''}" data-lmetric="strikeouts">Ponches (K)</button>
-    <button type="button" class="chart-pill ${dState.metric==='walks'?'active':''}" data-lmetric="walks">Bases x bola (BB)</button>
-    <button type="button" class="chart-pill ${dState.metric==='hits_vol'?'active':''}" data-lmetric="hits_vol">Hits</button>
-    <button type="button" class="chart-pill ${dState.metric==='reached_bases'?'active':''}" data-lmetric="reached_bases">Bateadoras envasadas</button>
-    <button type="button" class="chart-pill ${dState.metric==='not_reached_bases'?'active':''}" data-lmetric="not_reached_bases">Bateadoras no envasadas</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikes_pct'?'active':''}" data-lmetric="strikes_pct">% Strikes</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikes_vol'?'active':''}" data-lmetric="strikes_vol">Strikes</button>
-    <button type="button" class="chart-pill ${dState.metric==='fouls_hits'?'active':''}" data-lmetric="fouls_hits">Fouls+Hits</button>
-    <button type="button" class="chart-pill ${dState.metric==='all_good_vol'?'active':''}" data-lmetric="all_good_vol">Todo lo bueno (H+F+S)</button>
-    <button type="button" class="chart-pill ${dState.metric==='all_good_pct'?'active':''}" data-lmetric="all_good_pct">% Todo lo bueno</button>
-    <button type="button" class="chart-pill ${dState.metric==='bad_pct'?'active':''}" data-lmetric="bad_pct">% Todo lo malo</button>
-    <button type="button" class="chart-pill ${dState.metric==='balls_pct'?'active':''}" data-lmetric="balls_pct">% Bolas sin HBP</button>
-    <button type="button" class="chart-pill ${dState.metric==='balls_hbp'?'active':''}" data-lmetric="balls_hbp">Bolas+Golpeados</button>
-    <button type="button" class="chart-pill ${dState.metric==='total_pitches'?'active':''}" data-lmetric="total_pitches">Total pitcheos</button>
-    <button type="button" class="chart-pill ${dState.metric==='pitches_per_inn_no_warmup'?'active':''}" data-lmetric="pitches_per_inn_no_warmup">Pitcheos/inn</button>
-   </div>
+   ${metricPillsHtml(dState.metric, 'data-lmetric', GAME_ONLY_METRICS)}
 
    ${buildSvgEvolutionChart(pts, {
     title: 'Evolución del partido en directo',
@@ -2470,7 +2525,8 @@ function getAtBatSequenceBreakdown(events){
    notReachedBase,
    strikesPct,
    allGoodPct,
-   outcome
+   outcome,
+   firstStrike: items.length ? (isGoodPitch(items[0].type) || items[0].type === 'Foul' || isHit(items[0].type)) : null
   });
  });
  return list;
@@ -2779,6 +2835,23 @@ $('newGame').onclick=async()=>{
 // =========================================================================
 // GRÁFICAS SVG CON MEDIA HISTÓRICA, LÍNEA OBJETIVO Y TAMAÑO DE MUESTRA (n)
 // =========================================================================
+const METRIC_GROUPS = [
+ ['🎯 Control (porcentajes)', [['strikes_pct','% Strikes'],['all_good_pct','% Todo bueno'],['fps_pct','% 1.er strike'],['balls_pct','% Bolas'],['bad_pct','% Todo malo']]],
+ ['⚾ Lanzamientos', [['strikes_vol','Strikes'],['fouls_hits','Fouls+Hits'],['all_good_vol','Todo bueno'],['balls_hbp','Bolas+HBP'],['total_pitches','Total'],['pitches_per_inn_no_warmup','Por entrada']]],
+ ['🧢 Turnos y bateadoras', [['strikeouts','Ponches (K)'],['walks','Bases x bola'],['hits_vol','Hits'],['reached_bases','Envasadas'],['not_reached_bases','No envasadas']]],
+ ['⚖️ Comparar', [['good_vs_bad','🟢🔴 Buenas vs Malas'],['k_bb_hit','🎯 K / BB / Hits']]],
+ ['💨 Velocidad', [['avg_speed','Media (mph)'],['max_speed','Máxima (mph)']]]
+];
+function metricPillsHtml(active, attr, hide, extraAttr){
+ const hidden = new Set(hide || []);
+ return METRIC_GROUPS.map(([title, items]) => {
+  const btns = items.filter(([k]) => !hidden.has(k)).map(([k, l]) =>
+   `<button type="button" class="chart-pill ${active === k ? 'active' : ''}" ${attr}="${k}"${extraAttr || ''}>${l}</button>`).join('');
+  return btns ? `<div class="metric-group"><div class="metric-group-title">${title}</div><div class="chart-mode-pills" style="flex-wrap:wrap">${btns}</div></div>` : '';
+ }).join('');
+}
+const GAME_ONLY_METRICS = ['fps_pct', 'avg_speed', 'max_speed'];
+
 function buildSvgEvolutionChart(points, opts){
  const n = points.length;
  if(!n) return '<div class="muted" style="padding:20px;text-align:center">No hay datos suficientes para esta métrica.</div>';
@@ -2945,11 +3018,14 @@ function getMetricValueFromRecord(rec, metric){
  if(metric === 'balls_hbp') return (rec.ballsAndHbp !== undefined ? rec.ballsAndHbp : (rec.ballsPlusHbp !== undefined ? rec.ballsPlusHbp : (rec.balls_hbp ?? null)));
  if(metric === 'total_pitches') return rec.totalPitches ?? rec.total_pitches ?? null;
  if(metric === 'pitches_per_inn_no_warmup') return rec.pitchesPerInningNoWarmup ?? rec.pitches_per_inn_no_warmup ?? null;
+ if(metric === 'fps_pct') return (rec.fpsPct !== undefined && rec.fpsPct !== null) ? rec.fpsPct : null;
+ if(metric === 'avg_speed') return rec.avgSpeed > 0 ? rec.avgSpeed : null;
+ if(metric === 'max_speed') return rec.maxSpeed > 0 ? rec.maxSpeed : null;
  return null;
 }
 
 function isPercentMetric(metric){
- return metric === 'strikes_pct' || metric === 'all_good_pct' || metric === 'bad_pct' || metric === 'balls_pct';
+ return metric === 'fps_pct' || metric === 'strikes_pct' || metric === 'all_good_pct' || metric === 'bad_pct' || metric === 'balls_pct';
 }
 
 function getMetricLabel(metric){
@@ -2970,7 +3046,10 @@ function getMetricLabel(metric){
   all_good_vol: 'Todo lo bueno (H+F+S)',
   balls_hbp: 'Bolas+Golpeados',
   total_pitches: 'Total pitcheos',
-  pitches_per_inn_no_warmup: 'Pitcheos/inn (sin warm-up)'
+  pitches_per_inn_no_warmup: 'Pitcheos/inn (sin warm-up)',
+  fps_pct: '% Primer strike',
+  avg_speed: 'Velocidad media (mph)',
+  max_speed: 'Velocidad máxima (mph)'
  };
  return map[metric] || metric;
 }
@@ -3170,7 +3249,8 @@ function computeCareerAnalytics(sourceHistory=history){
    badPct,
    ballsPct,
    maxSpeed: s.maxSpeed,
-   avgSpeed: s.avgSpeed
+   avgSpeed: s.avgSpeed,
+   fpsPct: (treatAsAdvanced && atBats.length) ? (atBats.filter(a => a.firstStrike).length / atBats.length) * 100 : null
   };
  });
 
@@ -3283,9 +3363,18 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
   return;
  }
 
+ const fullHistory = sourceHistory;
+ let tournaments = [];
+ if(containerId === 'careerStatsContainer'){
+  tournaments = [...new Set(sourceHistory.map(g => (g.tournamentName || '').trim()).filter(Boolean))].sort();
+  if(careerTournament && !tournaments.includes(careerTournament)) careerTournament = '';
+  if(careerTournament) sourceHistory = sourceHistory.filter(g => (g.tournamentName || '').trim() === careerTournament);
+ }
  const c = computeCareerAnalytics(sourceHistory);
  const pitcherName = localStorage.getItem('softbolPitcher') || state.pitcher || 'Ari';
  const targetPct = getTargetGoodPct();
+ const fpsVals = c.series.filter(x => x.fpsPct !== null && x.fpsPct !== undefined).map(x => x.fpsPct);
+ const fpsKpi = fpsVals.length ? (fpsVals.reduce((a, b) => a + b, 0) / fpsVals.length).toFixed(1) + '%' : '--';
 
  let trendHtml = '';
  if(c.recentTrendDiff !== null){
@@ -3298,7 +3387,9 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
   }
  }
 
- const rangeFilteredSeries = careerChartRange === 'last10'
+ const rangeFilteredSeries = careerChartRange === 'last5'
+  ? c.series.slice(-5)
+  : careerChartRange === 'last10'
   ? c.series.slice(-10)
   : (careerChartRange === 'last20' ? c.series.slice(-20) : c.series);
 
@@ -3354,6 +3445,8 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
  }
 
  const isPct = isPercentMetric(careerChartMetric);
+ if(careerChartMetric === 'fps_pct') subtitleHtml = 'Porcentaje de turnos en los que el primer lanzamiento fue strike, foul o bola en juego. Solo se calcula en partidos de modo Avanzado.';
+ if(careerChartMetric === 'avg_speed' || careerChartMetric === 'max_speed') subtitleHtml = 'Velocidad medida con el analizador de vídeo, partido a partido (mph). Solo aparecen los partidos con velocidades registradas.';
  if(pts.length){
   avgLineVal = pts.reduce((acc, p) => acc + (Number(p.value) || 0), 0) / pts.length;
   if(careerChartGrouping === 'game' && careerChartMetric === 'strikes_pct') avgLineVal = c.globalEffPct;
@@ -3374,6 +3467,8 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
  else if(careerChartMetric === 'all_good_vol' || careerChartMetric === 'all_good_pct') barColor = '#059669';
  else if(careerChartMetric === 'bad_pct' || careerChartMetric === 'balls_pct') barColor = '#dc2626';
  else if(careerChartMetric === 'total_pitches' || careerChartMetric === 'pitches_per_inn_no_warmup') barColor = '#173c2d';
+ else if(careerChartMetric === 'fps_pct') barColor = '#059669';
+ else if(careerChartMetric === 'avg_speed' || careerChartMetric === 'max_speed') barColor = '#7c3aed';
 
  let groupedSeries = null;
  if(careerChartMetric === 'good_vs_bad'){
@@ -3436,6 +3531,8 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
     <h3 class="section-title" style="margin:0">📊 Totales de Carrera · ${esc(pitcherName)}</h3>
     <span class="muted">${c.totalGames} ${c.totalGames === 1 ? 'partido' : 'partidos'}</span>
    </div>
+   ${tournaments.length > 1 ? `<div class="row" style="margin:0 0 10px;gap:10px"><label class="label" for="careerTournamentSel" style="margin:0">Competición</label>
+     <select id="careerTournamentSel" style="max-width:62%"><option value="">Todas (${fullHistory.length})</option>${tournaments.map(t => `<option value="${esc(t)}" ${t === careerTournament ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select></div>` : ''}
    ${trendHtml}
    <div class="career-kpi-grid">
     <div class="career-kpi"><strong>${c.totalPitches}</strong><span>Pitcheos Totales</span><small>${c.actualPitches} juego + ${c.warmupPitches} warm</small></div>
@@ -3443,6 +3540,7 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
     <div class="career-kpi"><strong>${c.globalEffPct.toFixed(1)}%</strong><span>% Strikes</span><small>Todo bueno: ${c.globalAllGoodPct.toFixed(1)}%</small></div>
     <div class="career-kpi"><strong>${c.globalBadPct.toFixed(1)}%</strong><span>% Todo lo malo</span><small>Bolas + golpeadas (HBP)</small></div>
     <div class="career-kpi"><strong>${c.globalBallsPct.toFixed(1)}%</strong><span>% Bolas sin HBP</span><small>Solo bolas registradas</small></div>
+    <div class="career-kpi"><strong>${fpsKpi}</strong><span>% Primer strike</span><small>1.er lanzamiento de cada turno</small></div>
     <div class="career-kpi"><strong>${c.totalKs}</strong><span>Ponchados (K)</span><small>${c.avgKsPerGame.toFixed(1)} K / partido</small></div>
     <div class="career-kpi"><strong>${c.totalBBs}</strong><span>Bases x Bola</span><small>Ratio K/BB: ${c.kPerBbRatio.toFixed(2)}</small></div>
     <div class="career-kpi"><strong>${c.totalReachedBases||0}</strong><span>Bateadoras envasadas</span><small>Total acumulado</small></div>
@@ -3461,32 +3559,13 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
     </div>
    </div>
 
-   <div class="chart-toolbar">
-    <div class="chart-mode-pills" style="flex-wrap:wrap">
-     <button type="button" class="chart-pill ${careerChartMetric==='good_vs_bad'?'active':''}" data-metric="good_vs_bad">🟢🔴 Buenas vs Malas</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='k_bb_hit'?'active':''}" data-metric="k_bb_hit">🎯 K / BB / Hits</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='strikeouts'?'active':''}" data-metric="strikeouts">Ponches (K)</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='walks'?'active':''}" data-metric="walks">Bases x bola (BB)</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='hits_vol'?'active':''}" data-metric="hits_vol">Hits</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='reached_bases'?'active':''}" data-metric="reached_bases">Bateadoras envasadas</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='not_reached_bases'?'active':''}" data-metric="not_reached_bases">Bateadoras no envasadas</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='strikes_pct'?'active':''}" data-metric="strikes_pct">% Strikes</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='strikes_vol'?'active':''}" data-metric="strikes_vol">Strikes</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='fouls_hits'?'active':''}" data-metric="fouls_hits">Fouls+Hits</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='all_good_vol'?'active':''}" data-metric="all_good_vol">Todo lo bueno (H+F+S)</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='all_good_pct'?'active':''}" data-metric="all_good_pct">% Todo lo bueno</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='bad_pct'?'active':''}" data-metric="bad_pct">% Todo lo malo</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='balls_pct'?'active':''}" data-metric="balls_pct">% Bolas sin HBP</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='balls_hbp'?'active':''}" data-metric="balls_hbp">Bolas+Golpeados</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='total_pitches'?'active':''}" data-metric="total_pitches">Total pitcheos</button>
-     <button type="button" class="chart-pill ${careerChartMetric==='pitches_per_inn_no_warmup'?'active':''}" data-metric="pitches_per_inn_no_warmup">Pitcheos/inn</button>
-    </div>
-   </div>
+   <div class="chart-toolbar">${metricPillsHtml(careerChartMetric, 'data-metric', careerChartGrouping === 'game' ? (c.recordMaxSpeed > 0 ? [] : ['avg_speed','max_speed']) : GAME_ONLY_METRICS)}</div>
 
    <div class="row" style="margin:4px 0 6px;flex-wrap:wrap">
     ${careerChartGrouping==='game' ? `
      <div class="chart-mode-pills">
       <button type="button" class="chart-pill ${careerChartRange==='all'?'active':''}" data-range="all">Todos (${c.series.length})</button>
+      <button type="button" class="chart-pill ${careerChartRange==='last5'?'active':''}" data-range="last5">Últ. 5</button>
       <button type="button" class="chart-pill ${careerChartRange==='last10'?'active':''}" data-range="last10">Últ. 10</button>
       <button type="button" class="chart-pill ${careerChartRange==='last20'?'active':''}" data-range="last20">Últ. 20</button>
      </div>
@@ -3518,19 +3597,20 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
   container.querySelectorAll('[data-metric]').forEach(btn => {
   btn.onclick = () => {
    careerChartMetric = btn.dataset.metric;
-   renderCareerStats(sourceHistory, containerId);
+   renderCareerStats(fullHistory, containerId);
   };
  });
  container.querySelectorAll('[data-group]').forEach(btn => {
   btn.onclick = () => {
    careerChartGrouping = btn.dataset.group;
-   renderCareerStats(sourceHistory, containerId);
+   if(careerChartGrouping !== 'game' && GAME_ONLY_METRICS.includes(careerChartMetric)) careerChartMetric = 'strikes_pct';
+   renderCareerStats(fullHistory, containerId);
   };
  });
  container.querySelectorAll('[data-range]').forEach(btn => {
   btn.onclick = () => {
    careerChartRange = btn.dataset.range;
-   renderCareerStats(sourceHistory, containerId);
+   renderCareerStats(fullHistory, containerId);
   };
  });
  const inlineTgt = container.querySelector('#inlineTargetPct');
@@ -3539,9 +3619,11 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
    const v = Math.max(0, Math.min(100, Number(inlineTgt.value) || 70));
    localStorage.setItem('softbolTargetPct', String(v));
    if($('targetGoodPct')) $('targetGoodPct').value = String(v);
-   renderCareerStats(sourceHistory, containerId);
+   renderCareerStats(fullHistory, containerId);
   };
  }
+ const tSel = container.querySelector('#careerTournamentSel');
+ if(tSel){ tSel.onchange = () => { careerTournament = tSel.value; careerChartRange = 'all'; renderCareerStats(fullHistory, containerId); }; }
 }
 
 function buildWhatsAppSummaryText(g, stats){
@@ -3695,25 +3777,7 @@ function renderMatchDetailHtml(g){
      <button type="button" class="chart-pill ${dState.grouping==='game'?'active':''}" data-dgroup="game" data-gid="${g.id}">Total partido</button>
     </div>
    </div>
-   <div class="chart-mode-pills" style="flex-wrap:wrap;margin-bottom:6px">
-    <button type="button" class="chart-pill ${dState.metric==='good_vs_bad'?'active':''}" data-dmetric="good_vs_bad" data-gid="${g.id}">🟢🔴 Buenas vs Malas</button>
-    <button type="button" class="chart-pill ${dState.metric==='k_bb_hit'?'active':''}" data-dmetric="k_bb_hit" data-gid="${g.id}">🎯 K / BB / Hits</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikeouts'?'active':''}" data-dmetric="strikeouts" data-gid="${g.id}">Ponches (K)</button>
-    <button type="button" class="chart-pill ${dState.metric==='walks'?'active':''}" data-dmetric="walks" data-gid="${g.id}">Bases x bola (BB)</button>
-    <button type="button" class="chart-pill ${dState.metric==='hits_vol'?'active':''}" data-dmetric="hits_vol" data-gid="${g.id}">Hits</button>
-     <button type="button" class="chart-pill ${dState.metric==='reached_bases'?'active':''}" data-dmetric="reached_bases" data-gid="${g.id}">Bateadoras envasadas</button>
-     <button type="button" class="chart-pill ${dState.metric==='not_reached_bases'?'active':''}" data-dmetric="not_reached_bases" data-gid="${g.id}">Bateadoras no envasadas</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikes_pct'?'active':''}" data-dmetric="strikes_pct" data-gid="${g.id}">% Strikes</button>
-    <button type="button" class="chart-pill ${dState.metric==='strikes_vol'?'active':''}" data-dmetric="strikes_vol" data-gid="${g.id}">Strikes</button>
-    <button type="button" class="chart-pill ${dState.metric==='fouls_hits'?'active':''}" data-dmetric="fouls_hits" data-gid="${g.id}">Fouls+Hits</button>
-    <button type="button" class="chart-pill ${dState.metric==='all_good_vol'?'active':''}" data-dmetric="all_good_vol" data-gid="${g.id}">Todo lo bueno (H+F+S)</button>
-    <button type="button" class="chart-pill ${dState.metric==='all_good_pct'?'active':''}" data-dmetric="all_good_pct" data-gid="${g.id}">% Todo lo bueno</button>
-    <button type="button" class="chart-pill ${dState.metric==='bad_pct'?'active':''}" data-dmetric="bad_pct" data-gid="${g.id}">% Todo lo malo</button>
-    <button type="button" class="chart-pill ${dState.metric==='balls_pct'?'active':''}" data-dmetric="balls_pct" data-gid="${g.id}">% Bolas sin HBP</button>
-    <button type="button" class="chart-pill ${dState.metric==='balls_hbp'?'active':''}" data-dmetric="balls_hbp" data-gid="${g.id}">Bolas+Golpeados</button>
-    <button type="button" class="chart-pill ${dState.metric==='total_pitches'?'active':''}" data-dmetric="total_pitches" data-gid="${g.id}">Total pitcheos</button>
-    <button type="button" class="chart-pill ${dState.metric==='pitches_per_inn_no_warmup'?'active':''}" data-dmetric="pitches_per_inn_no_warmup" data-gid="${g.id}">Pitcheos/inn</button>
-   </div>
+   ${metricPillsHtml(dState.metric, 'data-dmetric', GAME_ONLY_METRICS, ` data-gid="${g.id}"`)}
    <div class="muted" style="font-size:11px;margin-bottom:6px">${esc(chartNote)}</div>
    ${buildSvgEvolutionChart(pts, {
     title: 'Evolución del partido',
@@ -4475,6 +4539,7 @@ $('deleteAll').onclick=async()=>{
 };
 
 syncInputs();
+$('gameInfo').open = !(state.homeTeam || state.awayTeam) && !state.events.length;
 if(state.currentMode) setModeDirect(state.currentMode); else render();
 renderHistory();
 renderCareerStats();
