@@ -351,6 +351,107 @@ select{text-overflow:ellipsis}
 .metric-group{margin-bottom:8px}
 .metric-group-title{font-size:11px;font-weight:800;color:var(--muted);margin:0 0 4px 2px;letter-spacing:.2px}
 .chart-pill{min-height:30px}
+
+/* ===== v3.3: Modo Partido, horizontal, zona segura, aviso de carga ===== */
+/* Márgenes laterales (iPhone en horizontal: la cámara queda a un lado) */
+header{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+main{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.tabs{padding-left:max(12px,env(safe-area-inset-left),calc((100vw - 720px)/2));padding-right:max(12px,env(safe-area-inset-right),calc((100vw - 720px)/2))}
+#matchModeScreen,#zoomModal{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+.modal-overlay{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+
+/* Colores con lógica: verdes/azules = bueno, naranja/rojo = malo, tonos bien distintos entre sí */
+.match-btn-strike{background:#15803d}
+.match-btn-ball{background:#c2410c}
+.match-btn-foul{background:#0369a1;min-height:92px;font-size:22px}
+.match-btn-hit{background:#4338ca;min-height:92px;font-size:22px}
+.match-btn-hbp{background:#b91c1c;min-height:60px;font-size:17px;padding:12px 10px;border-radius:16px}
+.match-btn-good{background:#15803d}
+.match-btn-bad{background:#b91c1c}
+.match-btn-huge{border-bottom:5px solid rgba(0,0,0,.28)}
+/* Barra inferior: Deshacer grande, "Reiniciar turno" aparte y discreto */
+.match-btn-action{min-height:56px;font-size:15px}
+#mUndo{order:-1}
+#mNextInning{order:0}
+#mResetCount{order:2;grid-column:1/-1;min-height:40px;font-size:13px;opacity:.85}
+
+.dot.active-ball{background:#c2410c;box-shadow:0 0 8px #fb923c}
+.dot.active-strike{background:#15803d;box-shadow:0 0 8px #4ade80}
+/* El aviso temporal no debe tapar los botones durante el partido: pasa arriba */
+.app-toast.top{bottom:auto;top:calc(6px + env(safe-area-inset-top,0px));transform:translate(-50%,-30px)}
+.app-toast.top.show{transform:translate(-50%,0)}
+
+/* Aviso de carga */
+.load-banner{border-radius:12px;padding:10px 12px;font-weight:800;font-size:14px;text-align:center;line-height:1.35}
+.load-banner.warn{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}
+.load-banner.limit{background:#fee2e2;color:#991b1b;border:1px solid #ef4444}
+#mLoadBanner{margin-bottom:8px}
+#mLoadBanner.warn{background:#78350f;color:#fde68a}
+#mLoadBanner.limit{background:#7f1d1d;color:#fecaca}
+.load-sub{display:block;font-size:11px;color:#a3c2b2;margin-top:2px;font-weight:700}
+.match-stat.load-warn{border-color:#f59e0b;background:rgba(245,158,11,.18)}
+.match-stat.load-warn strong{color:#fbbf24}
+.match-stat.load-limit{border-color:#ef4444;background:rgba(239,68,68,.24)}
+.match-stat.load-limit strong{color:#fca5a5}
+.stat.load-warn strong{color:#b45309}
+.stat.load-limit strong{color:#b91c1c}
+
+/* ===== v3.4: Modo Partido = pantalla fija, sin desplazamiento ===== */
+html:has(#matchModeScreen.active),body:has(#matchModeScreen.active){overflow:hidden;overscroll-behavior:none}
+#matchModeScreen{bottom:auto;height:100vh;height:100dvh;overflow:hidden!important;overscroll-behavior:none;
+ padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+#matchModeScreen.active{display:flex;flex-direction:column;gap:6px}
+#matchModeScreen>*{flex:0 0 auto;margin:0!important}
+#matchModeScreen>.match-grid-container{flex:1 1 0;min-height:0}
+.match-header{padding-bottom:6px}
+.match-title{font-size:16px}
+.btn-exit-match{padding:7px 12px;font-size:14px}
+.match-stat{padding:4px 6px}
+.match-stat strong{font-size:clamp(20px,3.4vh,28px)}
+.match-stat span{font-size:10px}
+.m-warmup button{min-height:34px}
+.match-count-box{padding:5px 8px}
+.match-reached-group-card{padding:4px 8px}
+.match-grid-panel{min-height:0;gap:8px}
+.match-adv-grid{grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr) 42px;gap:8px;min-height:0}
+.match-btn-huge{min-height:0!important;padding:4px 8px!important;font-size:clamp(17px,2.9vh,24px)!important;border-radius:16px}
+.match-btn-huge small{font-size:clamp(10px,1.5vh,13px)}
+.match-btn-hbp{font-size:14px!important;border-radius:12px;padding:2px 8px!important}
+.match-basic-grid{grid-template-rows:minmax(0,1fr);min-height:0}
+.match-simple-grid{min-height:0}
+/* Barra inferior en una sola fila, con una separación clara de los botones de lanzamiento */
+.match-bottom-bar{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:8px;padding-top:8px}
+.match-btn-action{min-height:52px;padding:6px 4px;font-size:13px;line-height:1.15}
+#mResetCount{grid-column:auto;order:2;min-height:52px;font-size:12.5px;opacity:1}
+@media (max-height:700px){.match-btn-huge small{display:none}.match-count-sub-header{margin-bottom:0}}
+
+/* Modo Partido en horizontal: contadores a la izquierda, botones a la derecha */
+@media (orientation:landscape) and (max-height:520px){
+ #matchModeScreen.active{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-template-rows:auto auto auto auto 1fr auto;gap:6px 12px;align-content:stretch;
+  padding-top:calc(6px + env(safe-area-inset-top,0px));padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+ .match-header{grid-column:1/-1;grid-row:1;padding-bottom:6px;margin-bottom:6px}
+ .match-title{font-size:16px}
+ .match-dashboard{grid-column:1;grid-row:2;margin-bottom:6px;gap:6px}
+ #mLoadBanner{display:none!important}
+ .m-warmup{grid-column:1;grid-row:4;margin:0 0 6px}
+ .match-count-row{grid-column:1;grid-row:5;margin-bottom:6px;gap:6px}
+ .match-reached-pair-box{grid-column:1;grid-row:6;margin:0}
+ .match-grid-container{grid-column:2;grid-row:2/6}
+ .match-bottom-bar{grid-column:2;grid-row:6;grid-template-columns:repeat(3,1fr);padding-top:6px}
+ #mResetCount{grid-column:auto;order:1;min-height:48px;font-size:13px}
+ .match-btn-action{min-height:48px}
+ .match-stat{padding:4px}.match-stat strong{font-size:22px}.match-stat span{font-size:10px}
+ .match-count-box{padding:5px}
+ .match-dashboard,.match-count-row,.match-reached-pair-box,.m-warmup{min-width:0}
+ .match-reached-pair-box{gap:6px}
+ .match-reached-group-card{padding:3px 6px;gap:4px;min-width:0}
+ .match-reached-group-vals{gap:6px}
+ .match-reached-group-title{font-size:9px}
+ .match-adv-grid,.match-basic-grid{grid-auto-rows:1fr;gap:8px}
+ .match-btn-huge{min-height:0!important;font-size:19px!important;padding:6px!important}
+ .match-btn-huge small{font-size:11px}
+ .match-btn-hbp{font-size:16px!important}
+}
 </style>
 </head>
 <body>
@@ -366,6 +467,7 @@ select{text-overflow:ellipsis}
  <div class="live-hero">
   <button class="primary match-cta" id="openMatchModeBtn">⚡ MODO PARTIDO<small id="matchCtaSub">Toca para empezar a registrar</small></button>
   <button class="secondary" id="openLiveStatsBtn" style="width:100%;padding:12px;font-size:15px">📊 Estadísticas del partido en directo</button>
+  <div class="load-banner" id="loadBanner" hidden></div>
  </div>
  <div class="card">
   <details class="game-info" id="gameInfo"><summary id="gameInfoSummary">Datos del partido</summary>
@@ -392,7 +494,7 @@ select{text-overflow:ellipsis}
   <div style="margin-bottom:10px"><div class="label">Torneo / Competición</div><input id="tournamentName" placeholder="Ej. Liga catalana, Copa..." ></div>
   </details>
   <div class="stats">
-   <div class="stat"><strong id="total">0</strong><span>Total pitcheos</span><small class="stat-sub" id="totalWarmupSub">Incl. warm-up: 0</small></div>
+   <div class="stat" id="totalStat"><strong id="total">0</strong><span>Total pitcheos</span><small class="stat-sub" id="totalWarmupSub">Incl. warm-up: 0</small></div>
    <div class="stat"><strong id="inningTotal">0</strong><span>Pitcheos inn</span><small class="muted" style="font-size:10px">Sin warm-up</small></div>
    <div class="stat"><strong id="inningsDone">1</strong><span>Inn</span><small class="muted" style="font-size:10px">Actual</small></div>
   </div>
@@ -561,6 +663,14 @@ select{text-overflow:ellipsis}
   <input id="targetGoodPct" type="number" min="0" max="100" step="1" value="70" style="margin-bottom:4px">
   <p class="notice" style="margin-top:0;margin-bottom:14px">Línea de referencia en las gráficas de porcentaje para ver si se cumple el objetivo.</p>
 
+  <label class="label" for="pitchLimit">Límite de pitcheos por partido (opcional)</label>
+  <input id="pitchLimit" type="number" inputmode="numeric" min="0" step="1" placeholder="Sin límite" style="margin-bottom:8px">
+  <div class="row" style="margin:0 0 4px;gap:10px;flex-wrap:nowrap">
+   <label class="label" for="pitchWarnLeft" style="margin:0">Avisar cuando queden</label>
+   <input id="pitchWarnLeft" type="number" inputmode="numeric" min="1" step="1" value="10" style="width:84px;margin:0">
+  </div>
+  <p class="notice" style="margin-top:4px;margin-bottom:14px">Vacío = sin límite y sin avisos. Cuenta el total del partido, incluido el calentamiento. El aviso es solo visual: nunca impide registrar lanzamientos.</p>
+
   <div style="border-top:1px solid var(--line);padding-top:14px;margin-bottom:14px">
    <h3 style="margin:0 0 6px;font-size:15px;color:var(--green)">🎥 Ajustes de grabación (Vídeo y FPS)</h3>
    <p class="notice" style="margin-top:0;margin-bottom:10px">En modo <b>Automático</b>, la app lee los tiempos reales de los fotogramas del vídeo y detecta si es cámara lenta o normal.</p>
@@ -720,10 +830,11 @@ select{text-overflow:ellipsis}
  </div>
 
  <div class="match-dashboard">
-  <div class="match-stat"><span>Total pitcheos</span><strong id="mTotal">0</strong></div>
+  <div class="match-stat" id="mTotalStat"><span>Total pitcheos</span><strong id="mTotal">0</strong><small class="load-sub" id="mLoadSub"></small></div>
   <div class="match-stat"><span>Pitcheos inn</span><strong id="mInningTotal">0</strong></div>
   <div class="match-stat"><span>Inn</span><strong id="mInning">1</strong></div>
  </div>
+ <div class="load-banner" id="mLoadBanner" hidden></div>
  <div class="m-warmup"><span>Calentamiento extra</span>
   <button type="button" id="mSubWarmup" aria-label="Quitar calentamiento extra" disabled>−</button><b id="mWarmupExtra">0</b><button type="button" id="mAddWarmup" aria-label="Añadir calentamiento extra">+1</button>
  </div>
@@ -761,15 +872,15 @@ select{text-overflow:ellipsis}
   <div id="match-panel-advanced" class="match-grid-panel active">
    <div class="match-adv-grid">
     <button class="match-btn-huge match-btn-priority match-btn-strike" data-event="Strike">
-     ⚡ STRIKE
+     🟢 STRIKE
      <small>Cantado / Abanico</small>
     </button>
     <button class="match-btn-huge match-btn-priority match-btn-ball" data-event="Bola">
-     🟡 BOLA
+     🟠 BOLA
      <small>Mala</small>
     </button>
     <button class="match-btn-huge match-btn-priority match-btn-foul" data-event="Foul">
-     🟢 FOUL
+     🔵 FOUL
      <small>Contacto foul</small>
     </button>
     <button class="match-btn-huge match-btn-priority match-btn-hit" data-event="Hit del bateador">
@@ -930,6 +1041,7 @@ function toast(msg,opts={}){
  t.textContent='';
  const sp=document.createElement('span');sp.textContent=msg;t.appendChild(sp);
  if(opts.action){const b=document.createElement('button');b.textContent=opts.action.label;b.onclick=()=>{t.classList.remove('show');opts.action.run();};t.appendChild(b);}
+ const mm=$('matchModeScreen');t.classList.toggle('top',!!(mm&&mm.classList.contains('active')));
  t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),opts.ms||3200);
 }
 const alert=m=>toast(String(m),{ms:4500}); // sustituye a los alert() que bloquean en iPhone
@@ -961,6 +1073,7 @@ const storageFail=()=>{if(!storageWarned){storageWarned=true;toast('⚠️ No se
 const saveCurrent=()=>{try{localStorage.setItem('softbolCurrent',JSON.stringify(state))}catch(e){storageFail()}};
 const saveHistory=()=>{try{localStorage.setItem('softbolHistory',JSON.stringify(history))}catch(e){storageFail()}};
 let redoStack=null;
+let lastTotalSeen=null;
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const isHit=e=>e==='Hit del bateador'||e==='En juego';
@@ -1960,6 +2073,50 @@ $('subWarmupBtn').onclick = () => warmupDelta(-1);
 $('mAddWarmup').onclick = () => warmupDelta(1);
 $('mSubWarmup').onclick = () => warmupDelta(-1);
 
+const PITCH_LIMIT_KEY = 'softbolPitchLimit', PITCH_WARN_KEY = 'softbolPitchWarnLeft';
+function getPitchLimit(){ const v = parseInt(localStorage.getItem(PITCH_LIMIT_KEY) || '', 10); return Number.isFinite(v) && v > 0 ? v : 0; }
+function getPitchWarnLeft(){ const v = parseInt(localStorage.getItem(PITCH_WARN_KEY) || '', 10); return Number.isFinite(v) && v > 0 ? v : 10; }
+
+// Aviso de carga: cuenta de lanzamientos restantes, color y banner. Nunca bloquea el registro.
+function updatePitchLoad(total){
+ const limit = getPitchLimit(), warn = getPitchWarnLeft();
+ const left = limit ? limit - total : null;
+ const level = !limit ? 'none' : (left <= 0 ? 'limit' : (left <= warn ? 'warn' : 'ok'));
+ const sub = $('mLoadSub');
+ if(sub) sub.textContent = !limit ? '' : (left > 0 ? `de ${limit} · quedan ${left}` : `LÍMITE ${limit}${left < 0 ? ' · +' + (-left) : ''}`);
+ ['mTotalStat', 'totalStat'].forEach(id => {
+  const el = $(id); if(!el) return;
+  el.classList.toggle('load-warn', level === 'warn');
+  el.classList.toggle('load-limit', level === 'limit');
+ });
+ const msg = level === 'limit'
+  ? `🛑 Límite de ${limit} pitcheos alcanzado${left < 0 ? ' (+' + (-left) + ')' : ''}`
+  : `⚠️ ${left === 1 ? 'Queda 1 pitcheo' : 'Quedan ' + left + ' pitcheos'} para el límite de ${limit}`;
+ ['mLoadBanner', 'loadBanner'].forEach(id => {
+  const el = $(id); if(!el) return;
+  if(level === 'warn' || level === 'limit'){ el.hidden = false; el.className = 'load-banner ' + level; el.textContent = msg; }
+  else el.hidden = true;
+ });
+ if(lastTotalSeen !== null && limit && total > lastTotalSeen){
+  const wasLeft = limit - lastTotalSeen;
+  if(left <= 0 && wasLeft > 0){ toast(msg, { ms: 7000 }); try{ navigator.vibrate && navigator.vibrate([250, 120, 250]); }catch(e){} }
+  else if(left > 0 && left <= warn && wasLeft > warn){ toast(msg, { ms: 6000 }); try{ navigator.vibrate && navigator.vibrate(200); }catch(e){} }
+ }
+ lastTotalSeen = total;
+}
+$('pitchLimit').onchange = () => {
+ const v = parseInt($('pitchLimit').value, 10);
+ if(Number.isFinite(v) && v > 0) localStorage.setItem(PITCH_LIMIT_KEY, String(v)); else { localStorage.removeItem(PITCH_LIMIT_KEY); $('pitchLimit').value = ''; }
+ lastTotalSeen = null; render();
+ toast(getPitchLimit() ? `Límite fijado en ${getPitchLimit()} pitcheos.` : 'Sin límite ni avisos.');
+};
+$('pitchWarnLeft').onchange = () => {
+ const v = parseInt($('pitchWarnLeft').value, 10);
+ localStorage.setItem(PITCH_WARN_KEY, String(Number.isFinite(v) && v > 0 ? v : 10));
+ $('pitchWarnLeft').value = getPitchWarnLeft(); lastTotalSeen = null; render();
+};
+function syncPitchLoadInputs(){ $('pitchLimit').value = getPitchLimit() || ''; $('pitchWarnLeft').value = getPitchWarnLeft(); }
+
 function updateGameInfoSummary(){
  const el = $('gameInfoSummary'); if(!el) return;
  const home = ($('homeTeam').value || state.homeTeam || '').trim() || 'Local';
@@ -2052,6 +2209,7 @@ function render(){
  }
 
  $('mTotal').textContent = totalPitches;
+ updatePitchLoad(totalPitches);
  $('mInning').textContent = state.inning;
  $('mInningTotal').textContent = currentInningPitches;
  $('mCountLabel1').textContent = lbl1;
@@ -2215,6 +2373,7 @@ function renderLiveOnlyStats(liveGame, containerId='liveCareerStatsContainer'){
   hits: r.hits,
   ks: r.ks,
   bbs: r.bbs,
+  reachedBases: r.reachedBases,
   notReachedBases: r.notReachedBases,
   total_pitches: r.pitches,
   pitches_per_inn_no_warmup: r.pitches
@@ -2234,6 +2393,7 @@ function renderLiveOnlyStats(liveGame, containerId='liveCareerStatsContainer'){
   hits: ab.hits,
   ks: ab.ks,
   bbs: ab.bbs,
+  reachedBases: (stats.isBasic || stats.isSimple) ? 0 : (ab.reachedBase || 0),
   notReachedBases: (stats.isBasic || stats.isSimple) ? 0 : (ab.notReachedBase || 0),
   total_pitches: ab.pitches,
   pitches_per_inn_no_warmup: ab.pitches
@@ -2253,6 +2413,7 @@ function renderLiveOnlyStats(liveGame, containerId='liveCareerStatsContainer'){
   hits: stats.hits,
   ks: stats.ks,
   bbs: stats.bbs,
+  reachedBases: stats.reachedBases || 0,
   notReachedBases: stats.notReachedBases || 0,
   total_pitches: stats.totalPitches,
   pitches_per_inn_no_warmup: stats.pitchesPerInningNoWarmup
@@ -3674,6 +3835,7 @@ function renderMatchDetailHtml(g){
   hits: r.hits,
   ks: r.ks,
   bbs: r.bbs,
+  reachedBases: r.reachedBases,
   notReachedBases: r.notReachedBases,
   total_pitches: r.pitches,
   pitches_per_inn_no_warmup: r.pitches
@@ -3693,6 +3855,7 @@ function renderMatchDetailHtml(g){
   hits: ab.hits,
   ks: ab.ks,
   bbs: ab.bbs,
+  reachedBases: (stats.isBasic || stats.isSimple) ? 0 : (ab.reachedBase || 0),
   notReachedBases: (stats.isBasic || stats.isSimple) ? 0 : (ab.notReachedBase || 0),
   total_pitches: ab.pitches,
   pitches_per_inn_no_warmup: ab.pitches
@@ -3713,6 +3876,7 @@ function renderMatchDetailHtml(g){
   hits: stats.hits,
   ks: stats.ks,
   bbs: stats.bbs,
+  reachedBases: stats.reachedBases || 0,
   notReachedBases: stats.notReachedBases || 0,
   total_pitches: stats.totalPitches,
   pitches_per_inn_no_warmup: stats.pitchesPerInningNoWarmup
@@ -3987,6 +4151,7 @@ function buildBackup(){
   distance:localStorage.getItem('softbolDistance')||'13.1',
   targetPct:String(getTargetGoodPct()),
   videoFps:videoSettings.fpsMode, videoType:videoSettings.recordingType,
+  pitchLimit:localStorage.getItem('softbolPitchLimit')||'', pitchWarnLeft:localStorage.getItem('softbolPitchWarnLeft')||'',
   allowMidChange:localStorage.getItem('softbolAllowMidChange')||'false',
   keepAwake:localStorage.getItem('softbolKeepAwake')||'false',
   history:history, current:state
@@ -4041,13 +4206,15 @@ function applyBackup(b,mode){
   if(b.current&&typeof b.current==='object'){state=b.current;fixState();}
   const set=(k,v)=>{if(v!==undefined&&v!==null&&v!=='')localStorage.setItem(k,v)};
   set('softbolPitcher',b.pitcher);set('softbolDistance',b.distance);set('softbolTargetPct',b.targetPct);
+  if(b.pitchLimit!==undefined){ if(b.pitchLimit) localStorage.setItem('softbolPitchLimit',b.pitchLimit); else localStorage.removeItem('softbolPitchLimit'); }
+  if(b.pitchWarnLeft) localStorage.setItem('softbolPitchWarnLeft',b.pitchWarnLeft);
   set('softbolAllowMidChange',b.allowMidChange);set('softbolKeepAwake',b.keepAwake);
   if(b.videoFps){videoSettings.fpsMode=b.videoFps;localStorage.setItem('softbolVideoFps',b.videoFps);}
   if(b.videoType){videoSettings.recordingType=b.videoType;localStorage.setItem('softbolVideoType',b.videoType);}
  }else{
   history=mergeHistory(history,b.history).list;
  }
- saveHistory();saveCurrent();syncInputs();updateWakeLock();
+ saveHistory();saveCurrent();syncInputs();syncPitchLoadInputs();lastTotalSeen=null;updateWakeLock();
  if(state.currentMode)setModeDirect(state.currentMode);else render();
  renderHistory();renderCareerStats();updateBackupUI();
 }
@@ -4540,6 +4707,7 @@ $('deleteAll').onclick=async()=>{
 
 syncInputs();
 $('gameInfo').open = !(state.homeTeam || state.awayTeam) && !state.events.length;
+syncPitchLoadInputs();
 if(state.currentMode) setModeDirect(state.currentMode); else render();
 renderHistory();
 renderCareerStats();
