@@ -452,6 +452,23 @@ html:has(#matchModeScreen.active),body:has(#matchModeScreen.active){overflow:hid
  .match-btn-huge small{font-size:11px}
  .match-btn-hbp{font-size:16px!important}
 }
+
+/* ===== v3.6: filtro de partidos ===== */
+.flt-panel{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 12px;background:#fafcf8}
+.flt-panel>summary{cursor:pointer;font-weight:800;color:var(--green);list-style:none;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:14px;line-height:1.35}
+.flt-panel>summary::-webkit-details-marker{display:none}
+.flt-panel>summary::after{content:'Cambiar ▾';font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+.flt-panel[open]>summary::after{content:'Ocultar ▴'}
+.flt-badge{background:#fef3c7;color:#92400e;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800;margin-left:6px;white-space:nowrap}
+.flt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin-top:10px}
+.flt-grid>div{min-width:0}
+.flt-grid select,.flt-grid input{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
+.flt-grid input[type=date]{-webkit-appearance:none;appearance:none;min-height:44px}
+.flt-list{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:8px;background:#fff;-webkit-overflow-scrolling:touch}
+.flt-row{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-bottom:1px solid #eef2ea;font-size:13px;line-height:1.35;min-height:44px;cursor:pointer}
+.flt-row:last-child{border-bottom:0}
+.flt-row input{width:20px;height:20px;padding:0;margin:1px 0 0;flex-shrink:0}
+.flt-row i{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -658,6 +675,28 @@ html:has(#matchModeScreen.active),body:has(#matchModeScreen.active){overflow:hid
   <input id="pitchingDistance" type="number" step="0.1" value="13.1" placeholder="13.1 (Reglamentario sóftbol)" style="margin-bottom:4px">
   <div id="distanceImperialPreview" class="muted" style="margin-bottom:12px;font-weight:700;color:var(--green)">Equivalente: 43.0 pies</div>
   <p class="notice" style="margin-top:-6px;margin-bottom:14px">Distancia oficial por defecto: 13.1 metros (43 pies). Modificable según categoría.</p>
+
+  <label class="label" for="releaseAdvance">Avance hasta la suelta (m) · corrección por el salto</label>
+  <input id="releaseAdvance" type="number" step="0.1" min="-2" max="6" inputmode="decimal" placeholder="0 = sin corrección" style="margin-bottom:4px">
+  <div id="effectiveDistancePreview" class="muted" style="margin-bottom:6px;font-weight:700;color:#6b21a8"></div>
+  <p class="notice" style="margin-top:0;margin-bottom:8px">La pelota no recorre toda la distancia reglamentaria: con el salto y la zancada, la lanzadora la suelta ~1–2 m por delante de la goma. Este valor se <b>resta</b> a la distancia para calcular la velocidad. Vacío o 0 = como hasta ahora.</p>
+  <details class="backup-help" style="margin-bottom:14px">
+   <summary>¿Cómo calculo este valor?</summary>
+   <ul>
+    <li><b>Con cinta métrica:</b> mide desde la goma hasta donde cae el pie delantero tras el salto (haz la media de 5 lanzamientos) y suma unos 0,3 m, porque la mano suele soltar algo por delante del pie. Es una aproximación.</li>
+    <li><b>Con radar (el método más fiable):</b> lanza varias veces con radar y la app a la vez, y rellena la calibración de abajo. Así las velocidades son comparables con las que se dan en el deporte.</li>
+    <li><b>Sin medir nada:</b> como punto de partida orientativo, 1,5 m. Es una estimación, no una medida.</li>
+    <li><b>Importante:</b> marca siempre <i>Salida</i> en el mismo momento (el fotograma en que la pelota se separa de los dedos) y <i>Llegada</i> cuando toca el guante. Un fotograma de diferencia cambia el resultado más que cualquier otro ajuste; la app te indica ese margen.</li>
+    <li>Este ajuste solo afecta a los análisis nuevos: las velocidades ya guardadas no cambian.</li>
+   </ul>
+   <div style="margin-top:10px;font-weight:800;color:var(--green)">Calibrar con radar</div>
+   <div class="row" style="gap:8px;margin-top:6px;flex-wrap:nowrap">
+    <div style="flex:1"><div class="label">Radar (mph)</div><input id="calRadar" type="number" step="0.1" inputmode="decimal" placeholder="Ej. 48"></div>
+    <div style="flex:1"><div class="label">App (mph)</div><input id="calApp" type="number" step="0.1" inputmode="decimal" placeholder="Ej. 53"></div>
+   </div>
+   <p style="margin:6px 0">Usa la <b>media de varios lanzamientos</b> y la velocidad que dio la app con el ajuste que tengas guardado ahora.</p>
+   <button type="button" class="secondary" id="calApply" style="width:100%">Calcular avance</button>
+  </details>
 
   <label class="label" for="targetGoodPct">Objetivo % Todo lo bueno (H+F+S)</label>
   <input id="targetGoodPct" type="number" min="0" max="100" step="1" value="70" style="margin-bottom:4px">
@@ -1066,6 +1105,88 @@ let careerChartMetric = 'strikes_pct';
 let careerChartGrouping = 'game'; // 'game' | 'turn' | 'inning'
 let careerChartRange = 'all';
 let careerTournament = '';
+let statsFilterOpen = false;
+let statsListScroll = 0;
+const STATS_FILTER_KEY = 'softbolStatsFilter';
+function getStatsFilter(){
+ let f = {};
+ try{ f = JSON.parse(localStorage.getItem(STATS_FILTER_KEY) || '{}') || {}; }catch(e){}
+ return { team: f.team || '', tournament: f.tournament || '', from: f.from || '', to: f.to || '', excluded: Array.isArray(f.excluded) ? f.excluded : [] };
+}
+function saveStatsFilter(f){ try{ localStorage.setItem(STATS_FILTER_KEY, JSON.stringify(f)); }catch(e){} }
+const pitcherTeamOf = g => ((g.pitcherTeamSide === 'away' ? g.awayTeam : g.homeTeam) || '').trim();
+const rivalOf = g => ((g.pitcherTeamSide === 'away' ? g.homeTeam : g.awayTeam) || '').trim();
+const tournamentOf = g => (g.tournamentName || '').trim();
+// skip: ignora el filtro de equipo o de torneo (para contar las opciones de cada desplegable)
+function passesStatsFilter(g, f, skip){
+ if(skip !== 'team' && f.team && pitcherTeamOf(g) !== f.team) return false;
+ if(skip !== 'tournament' && f.tournament && tournamentOf(g) !== f.tournament) return false;
+ if(f.from && (g.date || '') < f.from) return false;
+ if(f.to && (g.date || '') > f.to) return false;
+ return true;
+}
+function statsFilterPanelHtml(all, f, candidates, selectedCount){
+ const teams = [...new Set(all.map(pitcherTeamOf).filter(Boolean))].sort();
+ const tours = [...new Set(all.map(tournamentOf).filter(Boolean))].sort();
+ const active = !!(f.team || f.tournament || f.from || f.to || f.excluded.some(id => all.some(g => g.id === id)));
+ const opts = (arr, cur, kind) => '<option value="">Todos</option>' + arr.map(v => {
+  const n = all.filter(g => passesStatsFilter(g, f, kind) && (kind === 'team' ? pitcherTeamOf(g) === v : tournamentOf(g) === v)).length;
+  return `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(v)} (${n})</option>`;
+ }).join('');
+ const rows = candidates.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.id || 0) - (a.id || 0)).map(g => {
+  const on = !f.excluded.includes(g.id);
+  return `<label class="flt-row"><input type="checkbox" data-gsel="${g.id}" ${on ? 'checked' : ''}><span><b>${esc(g.date || '')}</b> · vs ${esc(rivalOf(g) || '—')}${g.finalScore ? ' · ' + esc(g.finalScore) : ''}${tournamentOf(g) ? ` <i>(${esc(tournamentOf(g))})</i>` : ''}</span></label>`;
+ }).join('');
+ return `
+  <details class="flt-panel" id="statsFilterPanel" ${statsFilterOpen ? 'open' : ''}>
+   <summary><span>🔎 Partidos que cuento: <b>${selectedCount} de ${all.length}</b>${active ? '<span class="flt-badge">Filtro activo</span>' : ''}</span></summary>
+   <div class="flt-grid">
+    ${teams.length > 1 ? `<div><div class="label">Equipo de la pitcher</div><select data-flt="team">${opts(teams, f.team, 'team')}</select></div>` : ''}
+    ${tours.length > 1 ? `<div><div class="label">Competición</div><select data-flt="tournament">${opts(tours, f.tournament, 'tournament')}</select></div>` : ''}
+    <div><div class="label">Desde</div><input type="date" data-flt="from" value="${esc(f.from)}"></div>
+    <div><div class="label">Hasta</div><input type="date" data-flt="to" value="${esc(f.to)}"></div>
+   </div>
+   <div class="row" style="margin-top:12px;align-items:center">
+    <b style="font-size:13px">Elegir partidos concretos</b>
+    <span style="display:flex;gap:6px"><button type="button" class="secondary tiny" data-fltact="all">Todos</button><button type="button" class="secondary tiny" data-fltact="none">Ninguno</button></span>
+   </div>
+   <div class="flt-list">${rows || '<div class="muted" style="padding:10px">Ningún partido cumple los filtros.</div>'}</div>
+   <button type="button" class="secondary tiny" data-fltact="reset" style="margin-top:8px;width:100%">Quitar todos los filtros</button>
+  </details>`;
+}
+function wireStatsFilter(container, fullHistory, containerId){
+ const panel = container.querySelector('#statsFilterPanel');
+ if(!panel) return;
+ const list = panel.querySelector('.flt-list');
+ if(list) list.scrollTop = statsListScroll;
+ panel.addEventListener('toggle', () => { statsFilterOpen = panel.open; });
+ const apply = patch => {
+  const nf = Object.assign(getStatsFilter(), patch);
+  saveStatsFilter(nf);
+  const l = container.querySelector('.flt-list'); statsListScroll = l ? l.scrollTop : 0;
+  renderCareerStats(fullHistory, containerId);
+ };
+ panel.querySelectorAll('[data-flt]').forEach(el => {
+  el.onchange = () => { statsListScroll = 0; apply({ [el.dataset.flt]: el.value }); };
+ });
+ const candidateIds = () => { const f = getStatsFilter(); return fullHistory.filter(g => passesStatsFilter(g, f)).map(g => g.id); };
+ panel.querySelectorAll('[data-gsel]').forEach(cb => {
+  cb.onchange = () => {
+   const id = Number(cb.dataset.gsel), ex = new Set(getStatsFilter().excluded);
+   if(cb.checked) ex.delete(id); else ex.add(id);
+   apply({ excluded: [...ex] });
+  };
+ });
+ panel.querySelectorAll('[data-fltact]').forEach(btn => {
+  btn.onclick = () => {
+   const act = btn.dataset.fltact;
+   if(act === 'reset'){ statsListScroll = 0; saveStatsFilter({}); renderCareerStats(fullHistory, containerId); return; }
+   const ids = candidateIds(), ex = new Set(getStatsFilter().excluded);
+   ids.forEach(id => { if(act === 'all') ex.delete(id); else ex.add(id); });
+   apply({ excluded: [...ex] });
+  };
+ });
+}
 const detailChartState = {}; // gameId -> { metric, grouping }
 
 let storageWarned=false;
@@ -1814,7 +1935,7 @@ function computeSpeedFromFrames(){
   return;
  }
 
- const distanceMeters = Number(localStorage.getItem('softbolDistance') || '13.1');
+ const distanceMeters = getEffectiveDistance();
  const metersPerSecond = distanceMeters / realSeconds;
  const mph = metersPerSecond * 2.23694;
 
@@ -1837,15 +1958,31 @@ function computeSpeedFromFrames(){
   : res.reason;
 
  renderReliabilityBadges(res.status, statusDetail);
- const detailLine = `FPS captura: ${effectiveCaptureFps} · Fotogramas: ${framesCount} · Tiempo real: ${realSeconds.toFixed(3)}s`;
+ const speedAt = f => (distanceMeters / (f / effectiveCaptureFps)) * 2.23694;
+ const halfErr = framesCount > 2 ? Math.abs(speedAt(framesCount - 1) - speedAt(framesCount + 1)) / 2 : 0;
+ const detailLine = `FPS captura: ${effectiveCaptureFps} · Fotogramas: ${framesCount} · Tiempo real: ${realSeconds.toFixed(3)}s · Distancia: ${distanceMeters.toFixed(1)} m · ±1 fotograma ≈ ±${halfErr.toFixed(1)} mph`;
  $('zoomCalcDetails').textContent = detailLine;
  $('mainCalcMeta').textContent = detailLine;
 }
 
+function getReleaseAdvance(){
+ const v = parseFloat(localStorage.getItem('softbolReleaseAdvance') || '');
+ return Number.isFinite(v) ? Math.max(-2, Math.min(6, v)) : 0;
+}
+function getEffectiveDistance(){
+ const d = Number(localStorage.getItem('softbolDistance') || '13.1') || 13.1;
+ return Math.max(3, d - getReleaseAdvance());
+}
 function updateDistancePreview(meters){
  const feet = meters * 3.28084;
  $('distanceImperialPreview').textContent = `Equivalente: ${feet.toFixed(1)} pies (${meters} m)`;
- $('speedDistLabel').textContent = `${meters}m (${feet.toFixed(1)} ft)`;
+ const advIn = parseFloat($('releaseAdvance').value);
+ const adv = Number.isFinite(advIn) ? advIn : 0;
+ const eff = Math.max(3, meters - adv);
+ $('effectiveDistancePreview').textContent = adv
+  ? `Distancia usada en el cálculo: ${eff.toFixed(1)} m (${(eff * 3.28084).toFixed(1)} ft)`
+  : 'Distancia usada en el cálculo: la reglamentaria (sin corrección)';
+ $('speedDistLabel').textContent = `${eff.toFixed(1)}m (${(eff * 3.28084).toFixed(1)} ft)`;
 }
 
 $('pitchingDistance').addEventListener('input', (e) => {
@@ -2022,6 +2159,7 @@ function syncInputs(){
  $('pitcher').value=state.pitcher||localStorage.getItem('softbolPitcher')||'Ari'; 
  const dist = localStorage.getItem('softbolDistance') || '13.1';
  $('pitchingDistance').value = dist;
+ $('releaseAdvance').value = getReleaseAdvance() || '';
  updateDistancePreview(Number(dist));
  $('targetGoodPct').value = String(getTargetGoodPct());
  syncVideoSettingsUI();
@@ -3525,11 +3663,22 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
  }
 
  const fullHistory = sourceHistory;
- let tournaments = [];
+ let filterPanelHtml = '';
  if(containerId === 'careerStatsContainer'){
-  tournaments = [...new Set(sourceHistory.map(g => (g.tournamentName || '').trim()).filter(Boolean))].sort();
-  if(careerTournament && !tournaments.includes(careerTournament)) careerTournament = '';
-  if(careerTournament) sourceHistory = sourceHistory.filter(g => (g.tournamentName || '').trim() === careerTournament);
+  const f = getStatsFilter();
+  const teamsAll = new Set(fullHistory.map(pitcherTeamOf)), toursAll = new Set(fullHistory.map(tournamentOf));
+  if(f.team && !teamsAll.has(f.team)) f.team = '';
+  if(f.tournament && !toursAll.has(f.tournament)) f.tournament = '';
+  saveStatsFilter(f);
+  const candidates = fullHistory.filter(g => passesStatsFilter(g, f));
+  const selected = candidates.filter(g => !f.excluded.includes(g.id));
+  filterPanelHtml = statsFilterPanelHtml(fullHistory, f, candidates, selected.length);
+  sourceHistory = selected;
+  if(!selected.length){
+   container.innerHTML = `<div class="card"><h3 class="section-title" style="margin:0 0 10px">📊 Totales de Carrera</h3>${filterPanelHtml}<div class="notice">No hay ningún partido seleccionado. Marca alguno de la lista o quita los filtros.</div></div>`;
+   wireStatsFilter(container, fullHistory, containerId);
+   return;
+  }
  }
  const c = computeCareerAnalytics(sourceHistory);
  const pitcherName = localStorage.getItem('softbolPitcher') || state.pitcher || 'Ari';
@@ -3692,8 +3841,7 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
     <h3 class="section-title" style="margin:0">📊 Totales de Carrera · ${esc(pitcherName)}</h3>
     <span class="muted">${c.totalGames} ${c.totalGames === 1 ? 'partido' : 'partidos'}</span>
    </div>
-   ${tournaments.length > 1 ? `<div class="row" style="margin:0 0 10px;gap:10px"><label class="label" for="careerTournamentSel" style="margin:0">Competición</label>
-     <select id="careerTournamentSel" style="max-width:62%"><option value="">Todas (${fullHistory.length})</option>${tournaments.map(t => `<option value="${esc(t)}" ${t === careerTournament ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select></div>` : ''}
+   ${filterPanelHtml}
    ${trendHtml}
    <div class="career-kpi-grid">
     <div class="career-kpi"><strong>${c.totalPitches}</strong><span>Pitcheos Totales</span><small>${c.actualPitches} juego + ${c.warmupPitches} warm</small></div>
@@ -3783,8 +3931,7 @@ function renderCareerStats(sourceHistory=history, containerId='careerStatsContai
    renderCareerStats(fullHistory, containerId);
   };
  }
- const tSel = container.querySelector('#careerTournamentSel');
- if(tSel){ tSel.onchange = () => { careerTournament = tSel.value; careerChartRange = 'all'; renderCareerStats(fullHistory, containerId); }; }
+ wireStatsFilter(container, fullHistory, containerId);
 }
 
 function buildWhatsAppSummaryText(g, stats){
@@ -4151,6 +4298,7 @@ function buildBackup(){
   distance:localStorage.getItem('softbolDistance')||'13.1',
   targetPct:String(getTargetGoodPct()),
   videoFps:videoSettings.fpsMode, videoType:videoSettings.recordingType,
+  releaseAdvance:localStorage.getItem('softbolReleaseAdvance')||'',
   pitchLimit:localStorage.getItem('softbolPitchLimit')||'', pitchWarnLeft:localStorage.getItem('softbolPitchWarnLeft')||'',
   allowMidChange:localStorage.getItem('softbolAllowMidChange')||'false',
   keepAwake:localStorage.getItem('softbolKeepAwake')||'false',
@@ -4206,6 +4354,7 @@ function applyBackup(b,mode){
   if(b.current&&typeof b.current==='object'){state=b.current;fixState();}
   const set=(k,v)=>{if(v!==undefined&&v!==null&&v!=='')localStorage.setItem(k,v)};
   set('softbolPitcher',b.pitcher);set('softbolDistance',b.distance);set('softbolTargetPct',b.targetPct);
+  if(b.releaseAdvance!==undefined){ if(b.releaseAdvance) localStorage.setItem('softbolReleaseAdvance',b.releaseAdvance); else localStorage.removeItem('softbolReleaseAdvance'); }
   if(b.pitchLimit!==undefined){ if(b.pitchLimit) localStorage.setItem('softbolPitchLimit',b.pitchLimit); else localStorage.removeItem('softbolPitchLimit'); }
   if(b.pitchWarnLeft) localStorage.setItem('softbolPitchWarnLeft',b.pitchWarnLeft);
   set('softbolAllowMidChange',b.allowMidChange);set('softbolKeepAwake',b.keepAwake);
@@ -4682,12 +4831,28 @@ async function handleExportExcel(){
 $('export').onclick = handleExportExcel;
 $('exportStatsExcel').onclick = handleExportExcel;
 
+$('releaseAdvance').oninput = () => updateDistancePreview(Number($('pitchingDistance').value) || 13.1);
+$('calApply').onclick = () => {
+ const radar = parseFloat($('calRadar').value), app = parseFloat($('calApp').value);
+ if(!(radar > 0 && app > 0)){ toast('Escribe la velocidad del radar y la de la app.'); return; }
+ const base = Number(localStorage.getItem('softbolDistance') || '13.1') || 13.1;
+ const newEff = getEffectiveDistance() * radar / app;
+ const adv = Math.round((base - newEff) * 10) / 10;
+ if(adv < -2 || adv > 6){ toast(`Ese ajuste (${adv} m) sale fuera de lo razonable. Repite con la media de varios lanzamientos o revisa las marcas.`, { ms: 7000 }); return; }
+ $('releaseAdvance').value = adv;
+ updateDistancePreview(Number($('pitchingDistance').value) || 13.1);
+ toast(`Avance calculado: ${adv} m. Pulsa «Guardar preferencias» para aplicarlo.`, { ms: 7000 });
+};
+
 $('saveSettings').onclick=()=>{
  const p=$('defaultPitcher').value.trim();
  const d=$('pitchingDistance').value.trim() || '13.1';
  const tgt = Math.max(0, Math.min(100, Number($('targetGoodPct').value) || 70));
  if(p){localStorage.setItem('softbolPitcher',p)}else{localStorage.removeItem('softbolPitcher')}
  localStorage.setItem('softbolDistance',d);
+ const advV = parseFloat($('releaseAdvance').value);
+ if(Number.isFinite(advV) && advV !== 0) localStorage.setItem('softbolReleaseAdvance', String(Math.max(-2, Math.min(6, advV))));
+ else { localStorage.removeItem('softbolReleaseAdvance'); $('releaseAdvance').value = ''; }
  localStorage.setItem('softbolTargetPct',String(tgt));
  localStorage.setItem('softbolVideoFps',videoSettings.fpsMode);
  localStorage.setItem('softbolVideoType',videoSettings.recordingType);
